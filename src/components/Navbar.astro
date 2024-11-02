@@ -10,17 +10,18 @@ const navItems = [
 ---
 
 <nav class="fixed w-full z-50 backdrop-blur-xl border-b border-white/5">
-  <div class="max-w-7xl mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
-      <div class="flex items-center">
-        <a href="/" class="flex-shrink-0 flex items-center space-x-2">
-          <img src="/forlux-logo.png" alt="Forlux Logo" class="h-8 w-auto" />
-          <span class="text-sm text-gray-400">by Caturmukti</span>
+      <!-- Logo and Brand -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/" class="flex items-center space-x-2">
+          <img src="/forlux-logo.png" alt="Forlux Logo" class="h-6 sm:h-8 w-auto" />
+          <span class="text-xs sm:text-sm text-gray-400 hidden sm:inline">by Caturmukti</span>
         </a>
       </div>
       
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex md:items-center md:space-x-6 lg:space-x-8">
+      <div class="hidden md:flex md:items-center md:space-x-4 lg:space-x-8">
         {navItems.map(item => (
           <a
             href={item.path}
@@ -29,11 +30,11 @@ const navItems = [
             {item.name}
           </a>
         ))}
-        <div class="h-4 w-px bg-white/10"></div> <!-- Separator -->
+        <div class="h-4 w-px bg-white/10"></div>
         <LanguageToggle client:load />
         <a
           href="/contact"
-          class="gradient-border"
+          class="gradient-border hidden lg:block"
         >
           <span class="block px-4 py-1.5 bg-[#1a1f2d] rounded-lg text-sm font-medium hover:bg-[#1a1f2d]/80 transition-all duration-300">
             Get Started
@@ -41,16 +42,19 @@ const navItems = [
         </a>
       </div>
 
-      <!-- Mobile Navigation Button -->
-      <div class="md:hidden flex items-center space-x-4">
+      <!-- Mobile Navigation Controls -->
+      <div class="flex md:hidden items-center space-x-2">
         <LanguageToggle client:load />
         <button
           id="mobile-menu-button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700/50 focus:outline-none"
+          aria-expanded="false"
         >
           <span class="sr-only">Open main menu</span>
+          <!-- Menu Icon -->
           <svg
-            class="h-6 w-6"
+            class="block h-6 w-6"
+            id="menu-icon"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -62,25 +66,43 @@ const navItems = [
               d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
+          <!-- Close Icon -->
+          <svg
+            class="hidden h-6 w-6"
+            id="close-icon"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </button>
       </div>
     </div>
   </div>
 
   <!-- Mobile Navigation Menu -->
-  <div id="mobile-menu" class="hidden md:hidden">
-    <div class="px-2 pt-2 pb-3 space-y-1 bg-slate-900/95 backdrop-blur-xl border-b border-white/5">
+  <div 
+    id="mobile-menu" 
+    class="hidden md:hidden absolute top-16 left-0 w-full transform transition-transform duration-200 ease-in-out"
+  >
+    <div class="px-4 pt-2 pb-3 space-y-2 bg-slate-900/95 backdrop-blur-xl border-b border-white/5 shadow-lg">
       {navItems.map(item => (
         <a
           href={item.path}
-          class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-forlux-orange-primary hover:bg-gray-700"
+          class="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-400 hover:text-forlux-orange-primary hover:bg-white/5 transition-all duration-200"
         >
           {item.name}
         </a>
       ))}
       <a
         href="/contact"
-        class="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-r from-forlux-orange-primary/10 to-forlux-orange-secondary/10 text-white hover:from-forlux-orange-primary/20 hover:to-forlux-orange-secondary/20"
+        class="block px-3 py-2.5 mt-4 rounded-lg text-base font-medium text-white bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary hover:opacity-90 transition-opacity duration-200 text-center"
       >
         Get Started
       </a>
@@ -91,23 +113,69 @@ const navItems = [
 <script>
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  function toggleMenu(show: boolean) {
+    if (show) {
+      mobileMenu?.classList.remove('hidden');
+      menuIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
+      mobileMenuButton?.setAttribute('aria-expanded', 'true');
+      // Add slide down animation
+      requestAnimationFrame(() => {
+        mobileMenu?.classList.add('translate-y-0');
+        mobileMenu?.classList.remove('-translate-y-full');
+      });
+    } else {
+      menuIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+      mobileMenuButton?.setAttribute('aria-expanded', 'false');
+      // Add slide up animation
+      mobileMenu?.classList.add('-translate-y-full');
+      mobileMenu?.classList.remove('translate-y-0');
+      // Hide after animation
+      setTimeout(() => {
+        mobileMenu?.classList.add('hidden');
+      }, 200);
+    }
+  }
 
   mobileMenuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+    toggleMenu(!isExpanded);
   });
 
   // Close mobile menu when clicking outside
   document.addEventListener('click', (event) => {
     const target = event.target as Node;
     if (!mobileMenuButton?.contains(target) && !mobileMenu?.contains(target)) {
-      mobileMenu?.classList.add('hidden');
+      toggleMenu(false);
     }
   });
 
   // Close mobile menu when window is resized to desktop size
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 768) {
-      mobileMenu?.classList.add('hidden');
+      toggleMenu(false);
     }
   });
 </script>
+
+<style>
+  .gradient-border {
+    position: relative;
+    border-radius: 0.5rem;
+    background: linear-gradient(to right, #FF6B2C, #FF9F2C);
+    padding: 1px;
+  }
+
+  #mobile-menu {
+    transform: translateY(-100%);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  #mobile-menu.translate-y-0 {
+    transform: translateY(0);
+  }
+</style>
