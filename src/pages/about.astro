@@ -44,8 +44,27 @@ const achievements = [
   <div class="relative">
     {/* Hero Section */}
     <section class="relative py-32 overflow-hidden">
+      {/* Background Effects */}
       <div class="absolute inset-0">
         <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/10 to-transparent opacity-30 blur-3xl"></div>
+      </div>
+
+      {/* Add Animated Traffic Elements */}
+      <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Traffic Grid Lines */}
+        <div class="traffic-grid absolute inset-0 opacity-20"></div>
+        
+        {/* Animated Dots */}
+        <div class="data-flow-container">
+          {Array(10).fill(0).map((_, i) => (
+            <div class={`data-point data-point-${i}`}></div>
+          ))}
+        </div>
+
+        {/* Connection Lines */}
+        <svg class="absolute inset-0 w-full h-full connection-lines opacity-20">
+          <path class="connection-path" d="M0 0" />
+        </svg>
       </div>
 
       <div class="container mx-auto relative">
@@ -201,3 +220,97 @@ const achievements = [
     </section>
   </div>
 </Layout>
+
+<style>
+  .traffic-grid {
+    background-image: linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px),
+                      linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .data-point {
+    @apply absolute w-2 h-2 rounded-full bg-forlux-orange-primary/60;
+    filter: blur(1px);
+  }
+
+  .connection-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 1;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  function initAnimations() {
+    // Create traffic flow animation
+    const dataPoints = document.querySelectorAll('.data-point');
+    
+    dataPoints.forEach((point, index) => {
+      gsap.set(point, {
+        x: gsap.utils.random(0, window.innerWidth),
+        y: gsap.utils.random(0, window.innerHeight),
+      });
+
+      gsap.to(point, {
+        duration: gsap.utils.random(3, 6),
+        x: `+=${gsap.utils.random(-300, 300)}`,
+        y: `+=${gsap.utils.random(-300, 300)}`,
+        opacity: gsap.utils.random(0.2, 0.6),
+        scale: gsap.utils.random(0.8, 1.5),
+        repeat: -1,
+        yoyo: true,
+        ease: "none",
+        delay: index * 0.2
+      });
+    });
+
+    // Animate grid
+    gsap.to('.traffic-grid', {
+      backgroundPosition: '50px 50px',
+      duration: 20,
+      repeat: -1,
+      ease: "none"
+    });
+
+    // Create connection lines animation
+    const connectionPath = document.querySelector('.connection-path');
+    const points = [];
+    
+    for (let i = 0; i < 5; i++) {
+      points.push({
+        x: gsap.utils.random(0, window.innerWidth),
+        y: gsap.utils.random(0, window.innerHeight)
+      });
+    }
+
+    const pathString = points.reduce((acc, point, i) => {
+      return `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`;
+    }, '');
+
+    gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
+    gsap.to(connectionPath, {
+      strokeDashoffset: 1000,
+      strokeDasharray: 1000,
+      duration: 10,
+      repeat: -1,
+      ease: "none"
+    });
+
+    return () => {
+      gsap.killTweensOf('.data-point');
+      gsap.killTweensOf('.traffic-grid');
+      gsap.killTweensOf('.connection-path');
+    };
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const cleanup = initAnimations();
+    
+    document.addEventListener('astro:before-preparation', () => {
+      cleanup();
+    }, { once: true });
+  });
+</script>

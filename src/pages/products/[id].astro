@@ -4,7 +4,7 @@ import { getProduct } from '../../utils/products';
 import { currentLanguage } from '../../stores/languageStore';
 
 export async function getStaticPaths() {
-  const productIds = ['integra', 'luminox', 'smartview', 'samson'];
+  const productIds = ['integra', 'luminox', 'SmartView', 'samson'];
   return productIds.map(id => ({
     params: { id },
   }));

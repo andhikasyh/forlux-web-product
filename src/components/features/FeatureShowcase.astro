@@ -42,18 +42,17 @@ const features = [
 ];
 ---
 
-<section class="relative py-32" id="feature-showcase">
+<section class="relative py-32 feature-section" id="feature-showcase">
   <div class="container mx-auto px-4">
     {features.map((feature, index) => (
       <div 
-        class="mb-32 last:mb-0"
-        data-aos="fade-up"
-        data-aos-delay={index * 100}
+        class="mb-32 last:mb-0 feature-item"
+        data-feature-index={index}
       >
-        <div class="glass-card p-8 relative overflow-hidden">
+        <div class="glass-card p-8 relative overflow-hidden feature-card">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <div class="space-y-6">
-              <div class="flex items-center space-x-4">
+            <div class="space-y-6 feature-content">
+              <div class="flex items-center space-x-4 feature-header">
                 <span class="text-4xl">{feature.icon}</span>
                 <h3 
                   class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}
@@ -64,15 +63,15 @@ const features = [
               </div>
               
               <p 
-                class="text-gray-400 leading-relaxed"
+                class="text-gray-400 leading-relaxed feature-description"
                 id={`description-${feature.id}`}
               >
                 Loading...
               </p>
 
-              <div class="flex space-x-8">
+              <div class="flex space-x-8 feature-stats">
                 {feature.stats.map(stat => (
-                  <div>
+                  <div class="stat-item">
                     <div class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
                       {stat.value}
                     </div>
@@ -87,7 +86,7 @@ const features = [
               </div>
             </div>
 
-            <div class="relative h-[400px] bg-slate-900/50 rounded-lg overflow-hidden">
+            <div class="relative h-[400px] bg-slate-900/50 rounded-lg overflow-hidden feature-animation">
               {feature.animation === "modular" && (
                 <ModularAnimation client:visible />
               )}
@@ -105,9 +104,44 @@ const features = [
   </div>
 </section>
 
+<style>
+  .feature-section {
+    opacity: 0;
+  }
+
+  .feature-item {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  .feature-card {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  .feature-content {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+
+  .feature-animation {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+
+  .stat-item {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+</style>
+
 <script>
   import { currentLanguage } from '../../stores/languageStore';
   import { translations } from '../../utils/translations';
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
 
   function updateContent(lang) {
     const t = translations[lang].features.showcase;
@@ -131,26 +165,100 @@ const features = [
     document.getElementById('stat-command-updates').textContent = t.command.stats.updates;
   }
 
-  function initFeatureShowcase() {
-    // Initial render
-    updateContent(currentLanguage.get());
+  function initAnimations() {
+    // Initial section reveal
+    gsap.to('.feature-section', {
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.out'
+    });
 
-    // Listen for language changes
+    // Animate each feature card
+    gsap.utils.toArray<HTMLElement>('.feature-item').forEach((item, i) => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 80%',
+          end: 'center center',
+          scrub: 1,
+          toggleActions: 'play reverse play reverse'
+        }
+      });
+
+      // Card container animation
+      tl.to(item.querySelector('.feature-card'), {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power3.out'
+      })
+
+      // Content side animation
+      .to(item.querySelector('.feature-content'), {
+        x: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power2.out'
+      }, '-=0.4')
+
+      // Stats animation with stagger
+      .to(item.querySelectorAll('.stat-item'), {
+        y: 0,
+        opacity: 1,
+        duration: 0.4,
+        stagger: 0.1,
+        ease: 'back.out(1.7)'
+      }, '-=0.2')
+
+      // Animation side
+      .to(item.querySelector('.feature-animation'), {
+        x: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power2.out'
+      }, '-=0.4');
+
+      // Add hover animation
+      item.addEventListener('mouseenter', () => {
+        gsap.to(item.querySelector('.feature-card'), {
+          y: -10,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+
+      item.addEventListener('mouseleave', () => {
+        gsap.to(item.querySelector('.feature-card'), {
+          y: 0,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }
+
+  function initFeatureShowcase() {
+    updateContent(currentLanguage.get());
+    const cleanupAnimations = initAnimations();
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });
 
-    // Cleanup subscription when component is destroyed
-    return unsubscribe;
+    return () => {
+      cleanupAnimations();
+      unsubscribe();
+    };
   }
 
-  // Handle initial load and page transitions
   document.addEventListener('astro:page-load', () => {
-    const unsubscribe = initFeatureShowcase();
+    const cleanup = initFeatureShowcase();
     
-    // Cleanup on page transition
     document.addEventListener('astro:before-preparation', () => {
-      unsubscribe();
+      cleanup();
     }, { once: true });
   });
 </script>

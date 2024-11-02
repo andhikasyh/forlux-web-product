@@ -112,7 +112,7 @@ export const translations = {
         badge: "Made in Indonesia 🇮🇩"
       },
 
-      smartview: {
+      SmartView: {
         name: "FORLUX SmartView",
         tagline: "AI-Powered Surveillance",
         description: "Advanced AI-powered traffic camera that transforms raw footage into actionable insights.",
@@ -490,7 +490,7 @@ export const translations = {
 
     comparison: {
       label: "Why Choose FORLUX",
-      title: "The FORLUX Advantage",
+      title: "FORLUX Advantage",
       description: "See how FORLUX sets new standards in traffic management technology",
       labels: {
         forlux: "FORLUX",
@@ -533,6 +533,20 @@ export const translations = {
         title1: "Smart Traffic Solutions",
         title2: "for Modern Cities",
         description: "Experience the future of traffic management with our comprehensive suite of intelligent solutions, proudly engineered and manufactured in Indonesia."
+      },
+      items: {
+        panel: {
+          title: "Control Panel",
+          description: "Advanced traffic control panel with modular design for easy maintenance and upgrades."
+        },
+        luminox: {
+          title: "Luminox System",
+          description: "Intelligent lighting control system for optimal energy efficiency and visibility."
+        },
+        SmartView: {
+          title: "SmartView Interface",
+          description: "Comprehensive monitoring dashboard with real-time analytics and control capabilities."
+        }
       }
     },
 
@@ -688,7 +702,7 @@ export const translations = {
         badge: "Buatan Indonesia 🇮🇩"
       },
 
-      smartview: {
+      SmartView: {
         name: "FORLUX SmartView",
         tagline: "Pengawasan Berbasis AI",
         description: "Kamera lalu lintas bertenaga AI canggih yang mengubah rekaman mentah menjadi wawasan yang dapat ditindaklanjuti.",
@@ -1074,6 +1088,20 @@ export const translations = {
         title1: "Solusi Lalu Lintas Pintar",
         title2: "untuk Kota Modern",
         description: "Rasakan masa depan manajemen lalu lintas dengan rangkaian solusi cerdas kami yang komprehensif, dengan bangga direkayasa dan diproduksi di Indonesia."
+      },
+      items: {
+        panel: {
+          title: "Panel Kontrol",
+          description: "Panel kontrol lalu lintas canggih dengan desain modular untuk pemeliharaan dan peningkatan yang mudah."
+        },
+        luminox: {
+          title: "Sistem Luminox",
+          description: "Sistem kontrol pencahayaan cerdas untuk efisiensi energi dan visibilitas optimal."
+        },
+        SmartView: {
+          title: "Antarmuka SmartView",
+          description: "Dashboard pemantauan komprehensif dengan analitik dan kemampuan kontrol real-time."
+        }
       }
     },
 

@@ -33,27 +33,23 @@ const icons = {
 };
 ---
 
-<section class="relative py-32 bg-slate-900/50" id="technology-stack">
+<section class="relative py-32 bg-slate-900/50 tech-stack-section" id="technology-stack">
   <div class="container mx-auto px-4">
-    <div 
-      class="text-center mb-16"
-      data-aos="fade-up"
-      data-aos-duration="800"
-    >
+    <div class="text-center mb-16 tech-stack-header">
       <span 
-        class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4"
+        class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4 tech-label"
         id="tech-stack-label"
       >
         Technology Stack
       </span>
       <h2 
-        class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient"
+        class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient tech-title"
         id="tech-stack-title"
       >
         Built for Performance
       </h2>
       <p 
-        class="text-gray-400 max-w-2xl mx-auto"
+        class="text-gray-400 max-w-2xl mx-auto tech-description"
         id="tech-stack-description"
       >
         Powered by cutting-edge technology and engineered for reliability
@@ -62,13 +58,8 @@ const icons = {
 
     <div class="space-y-24">
       {categories.map((category, categoryIndex) => (
-        <div 
-          class="space-y-12"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay={categoryIndex * 200}
-        >
-          <div class="text-center">
+        <div class="space-y-12 tech-category" data-category-index={categoryIndex}>
+          <div class="text-center category-header">
             <h3 
               class={`text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r ${category.gradient}`}
               id={`category-title-${category.id}`}
@@ -86,10 +77,8 @@ const icons = {
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {Array.from({ length: category.itemCount }).map((_, itemIndex) => (
               <div 
-                class="group relative"
-                data-aos="zoom-in"
-                data-aos-duration="800"
-                data-aos-delay={itemIndex * 100}
+                class="group relative tech-item"
+                data-item-index={itemIndex}
               >
                 <div class={`absolute inset-0 bg-gradient-to-r ${category.gradient} opacity-0 group-hover:opacity-5 transition-all duration-500 rounded-xl blur-xl`}></div>
                 
@@ -141,9 +130,18 @@ const icons = {
   </div>
 </section>
 
+<style>
+  /* Remove all initial opacity settings */
+  /* Let GSAP handle the initial states */
+</style>
+
 <script>
   import { currentLanguage } from '../../stores/languageStore';
   import { translations } from '../../utils/translations';
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
 
   function updateContent(lang) {
     const t = translations[lang].features.technology;
@@ -174,26 +172,92 @@ const icons = {
     });
   }
 
+  function initAnimations() {
+    // Set initial states
+    gsap.set('.tech-stack-section', { opacity: 1 });
+    gsap.set('.tech-stack-header', { opacity: 0, y: 30 });
+    gsap.set('.tech-category', { opacity: 0, y: 50 });
+    gsap.set('.tech-item', { opacity: 0, y: 30 });
+
+    // Animate header immediately
+    gsap.to('.tech-stack-header', {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power3.out'
+    });
+
+    // Animate categories and items
+    gsap.utils.toArray<HTMLElement>('.tech-category').forEach((category, index) => {
+      // Create timeline for each category
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: category as Element,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+          markers: false // Enable for debugging
+        }
+      });
+
+      // Animate category
+      tl.to(category as HTMLElement, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      })
+      // Animate items within category
+      .to((category as HTMLElement).querySelectorAll('.tech-item'), {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power3.out'
+      }, '-=0.4');
+    });
+
+    // Simple hover effect
+    const items = document.querySelectorAll<HTMLElement>('.tech-item');
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        gsap.to(item, { y: -10, duration: 0.3 });
+      });
+      
+      item.addEventListener('mouseleave', () => {
+        gsap.to(item, { y: 0, duration: 0.3 });
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }
+
   function initTechnologyStack() {
-    // Initial render
+    // Update content first
     updateContent(currentLanguage.get());
 
-    // Listen for language changes
+    // Initialize animations
+    const cleanup = initAnimations();
+    
+    // Subscribe to language changes
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });
 
-    // Cleanup subscription when component is destroyed
-    return unsubscribe;
+    // Return cleanup function
+    return () => {
+      if (typeof cleanup === 'function') cleanup();
+      unsubscribe();
+    };
   }
 
-  // Handle initial load and page transitions
+  // Handle page load
   document.addEventListener('astro:page-load', () => {
-    const unsubscribe = initTechnologyStack();
+    const cleanup = initTechnologyStack();
     
-    // Cleanup on page transition
     document.addEventListener('astro:before-preparation', () => {
-      unsubscribe();
+      if (typeof cleanup === 'function') cleanup();
     }, { once: true });
   });
 </script>

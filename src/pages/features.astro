@@ -5,13 +5,59 @@ import FeatureShowcase from '../components/features/FeatureShowcase.astro';
 import TechnologyStack from '../components/features/TechnologyStack.astro';
 import IntegrationDemo from '../components/features/IntegrationDemo';
 import SystemArchitecture from '../components/features/SystemArchitecture.astro';
-
+import ContactCTA from '../components/ContactCTA.astro';
 ---
 
 <Layout title="Features">
-  <FeatureHero />
-  <FeatureShowcase />
-  <TechnologyStack />
-  <IntegrationDemo client:load />
-  <SystemArchitecture />
+  <main class="relative scroll-smooth">
+    <!-- Add smooth scroll container -->
+    <div class="smooth-scroll-container">
+      <FeatureHero />
+      <FeatureShowcase />
+      <TechnologyStack />
+      <IntegrationDemo client:load />
+      <SystemArchitecture />
+      <ContactCTA />
+    </div>
+  </main>
 </Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .smooth-scroll-container {
+    @apply relative;
+    /* Optional: Add native smooth scroll for browsers that support it */
+    scroll-behavior: smooth;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .smooth-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initSmoothScroll() {
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    };
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const cleanup = initSmoothScroll();
+    
+    document.addEventListener('astro:before-preparation', () => {
+      cleanup && cleanup();
+    }, { once: true });
+  });
+</script>

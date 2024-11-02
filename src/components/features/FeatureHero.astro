@@ -6,14 +6,31 @@ import { translations } from '../../utils/translations';
 const initialLang = currentLanguage.get();
 ---
 
-<section class="relative min-h-[40vh] flex items-center justify-center py-32 overflow-hidden" id="feature-hero">
+<section class="relative min-h-[40vh] flex items-center justify-center py-32 overflow-hidden feature-section" id="feature-hero">
+  <!-- Background Effects -->
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
   </div>
 
+  <!-- Animated Traffic Elements -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="traffic-grid absolute inset-0 opacity-20"></div>
+    
+    <div class="data-flow-container">
+      {Array(10).fill(0).map((_, i) => (
+        <div class={`data-point data-point-${i}`}></div>
+      ))}
+    </div>
+
+    <svg class="absolute inset-0 w-full h-full connection-lines opacity-20">
+      <path class="connection-path" d="M0 0" />
+    </svg>
+  </div>
+
+  <!-- Main Content -->
   <div class="container relative z-10 px-4 mx-auto">
-    <div class="text-center max-w-4xl mx-auto">
-      <div class="mb-6" data-aos="fade-down">
+    <div class="text-center max-w-4xl mx-auto hero-content">
+      <div class="mb-6 feature-item">
         <span 
           class="inline-block px-4 py-2 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20"
           id="capabilities-text"
@@ -23,9 +40,7 @@ const initialLang = currentLanguage.get();
       </div>
 
       <h1 
-        class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white"
-        data-aos="fade-up"
-        data-aos-delay="100"
+        class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white feature-item"
       >
         <span 
           class="bg-clip-text text-transparent bg-forlux-orange-gradient"
@@ -38,9 +53,7 @@ const initialLang = currentLanguage.get();
       </h1>
 
       <p 
-        class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
-        data-aos="fade-up"
-        data-aos-delay="200"
+        class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed feature-item"
         id="description-text"
       >
         Discover how FORLUX's cutting-edge features revolutionize urban traffic control with Indonesian innovation and world-class technology.
@@ -49,40 +62,170 @@ const initialLang = currentLanguage.get();
   </div>
 </section>
 
+<style>
+  .traffic-grid {
+    background-image: linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px),
+                      linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .data-point {
+    @apply absolute w-2 h-2 rounded-full bg-forlux-orange-primary/60;
+    filter: blur(1px);
+  }
+
+  .connection-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 1;
+  }
+
+  .feature-section {
+    opacity: 0; /* Start hidden for scroll reveal */
+  }
+
+  .hero-content {
+    perspective: 1000px; /* For 3D animations */
+  }
+
+  .feature-item {
+    opacity: 0;
+    transform: translateY(30px);
+    will-change: transform, opacity;
+  }
+</style>
+
 <script>
   import { currentLanguage } from '../../stores/languageStore';
   import { translations } from '../../utils/translations';
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
 
   function updateContent(lang) {
     const t = translations[lang].features.hero;
-
-    // Update text content
+    
     document.getElementById('capabilities-text').textContent = t.capabilities;
     document.getElementById('next-gen-text').textContent = t.nextGen;
     document.getElementById('traffic-management-text').textContent = t.trafficManagement;
     document.getElementById('description-text').textContent = t.description;
   }
 
-  function initFeatureHero() {
-    // Initial render
-    updateContent(currentLanguage.get());
+  function initAnimations() {
+    // Initial section reveal
+    gsap.to('.feature-section', {
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.out'
+    });
 
-    // Listen for language changes
+    // Staggered content reveal
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.hero-content',
+        start: 'top 80%',
+        end: 'bottom 20%',
+        scrub: 1,
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+
+    tl.fromTo('.feature-item', {
+      y: 100,
+      opacity: 0,
+      rotateX: -15
+    }, {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: 'power3.out'
+    });
+
+    // Background animations
+    const dataPoints = document.querySelectorAll('.data-point');
+    dataPoints.forEach((point, index) => {
+      gsap.set(point, {
+        x: gsap.utils.random(0, window.innerWidth),
+        y: gsap.utils.random(0, window.innerHeight),
+      });
+
+      gsap.to(point, {
+        duration: gsap.utils.random(3, 6),
+        x: `+=${gsap.utils.random(-300, 300)}`,
+        y: `+=${gsap.utils.random(-300, 300)}`,
+        opacity: gsap.utils.random(0.2, 0.6),
+        scale: gsap.utils.random(0.8, 1.5),
+        repeat: -1,
+        yoyo: true,
+        ease: "none",
+        delay: index * 0.2
+      });
+    });
+
+    // Grid animation with scroll effect
+    ScrollTrigger.create({
+      trigger: '.traffic-grid',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1,
+      animation: gsap.to('.traffic-grid', {
+        backgroundPosition: '50px 50px',
+        ease: "none"
+      })
+    });
+
+    // Connection lines animation
+    const connectionPath = document.querySelector('.connection-path');
+    const points = [];
+    for (let i = 0; i < 5; i++) {
+      points.push({
+        x: gsap.utils.random(0, window.innerWidth),
+        y: gsap.utils.random(0, window.innerHeight)
+      });
+    }
+
+    const pathString = points.reduce((acc, point, i) => (
+      `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`
+    ), '');
+
+    gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
+    gsap.to(connectionPath, {
+      strokeDashoffset: 1000,
+      strokeDasharray: 1000,
+      duration: 10,
+      repeat: -1,
+      ease: "none"
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+      gsap.killTweensOf('.data-point');
+      gsap.killTweensOf('.traffic-grid');
+      gsap.killTweensOf('.connection-path');
+    };
+  }
+
+  function initFeatureHero() {
+    updateContent(currentLanguage.get());
+    const cleanupAnimations = initAnimations();
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });
 
-    // Cleanup subscription when component is destroyed
-    return unsubscribe;
+    return () => {
+      cleanupAnimations();
+      unsubscribe();
+    };
   }
 
-  // Handle initial load and page transitions
   document.addEventListener('astro:page-load', () => {
-    const unsubscribe = initFeatureHero();
+    const cleanup = initFeatureHero();
     
-    // Cleanup on page transition
     document.addEventListener('astro:before-preparation', () => {
-      unsubscribe();
+      cleanup();
     }, { once: true });
   });
 </script>
