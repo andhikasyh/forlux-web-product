@@ -1,19 +1,197 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getProduct } from '../../utils/products';
 import { currentLanguage } from '../../stores/languageStore';
 
-export async function getStaticPaths() {
-  const productIds = ['integra', 'luminox', 'SmartView', 'samson'];
-  return productIds.map(id => ({
-    params: { id },
-  }));
+// Add getStaticPaths function
+export function getStaticPaths() {
+  // Define all possible product IDs
+  return [
+    { params: { id: 'integra' } },
+    { params: { id: 'luminox' } },
+    { params: { id: 'SmartView' } }
+  ];
 }
 
+// Hardcoded product translations
+const products = {
+  en: {
+    integra: {
+      name: "FORLUX Integra",
+      description: "Revolutionary smart traffic control system powered by ARM Cortex M4 technology, delivering unmatched reliability and real-time control.",
+      badge: "Made in Indonesia",
+      gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
+      features: [
+        {
+          icon: "🔧",
+          title: "ARM Cortex M4",
+          desc: "Industrial-grade T7 series processor"
+        },
+        {
+          icon: "🔄",
+          title: "Hot-Swappable Design",
+          desc: "Zero-downtime maintenance"
+        },
+        {
+          icon: "📡",
+          title: "Fiber Network",
+          desc: "High-speed data transmission"
+        },
+        {
+          icon: "⚡",
+          title: "Real-time Control",
+          desc: "Instant response and monitoring"
+        }
+      ],
+      specs: [
+        "ARM Cortex M4 Processor",
+        "Industrial Grade Components",
+        "IP65 Weather Protection",
+        "Fiber Optic Ready",
+        "Hot-Swappable Modules",
+        "Real-time Monitoring"
+      ]
+    },
+    luminox: {
+      name: "FORLUX LuminoX",
+      description: "High-performance traffic light system with advanced Fresnel Lens technology for optimal visibility and energy efficiency.",
+      badge: "Energy Efficient",
+      gradient: "from-forlux-green-primary to-forlux-green-secondary",
+      features: [
+        {
+          icon: "💡",
+          title: "LED Technology",
+          desc: "Advanced SMD LED array"
+        },
+        {
+          icon: "🌞",
+          title: "Solar Ready",
+          desc: "Compatible with solar power"
+        },
+        {
+          icon: "🔋",
+          title: "Power Efficient",
+          desc: "Low power consumption"
+        },
+        {
+          icon: "🛡️",
+          title: "Weather Proof",
+          desc: "IP65 rated enclosure"
+        }
+      ],
+      specs: [
+        "SMD LED Technology",
+        "Solar Power Compatible",
+        "IP65 Weather Rating",
+        "5-Year Warranty",
+        "Energy Star Certified",
+        "Smart Dimming Control"
+      ]
+    },
+    SmartView: {
+      name: "FORLUX SmartView",
+      description: "Advanced AI-powered traffic monitoring system that transforms raw footage into actionable insights.",
+      badge: "AI Powered",
+      gradient: "from-forlux-blue-primary to-forlux-blue-secondary",
+      features: [
+        {
+          icon: "🤖",
+          title: "AI Analytics",
+          desc: "Real-time traffic analysis"
+        },
+        {
+          icon: "📊",
+          title: "Smart Dashboard",
+          desc: "Intuitive monitoring interface"
+        },
+        {
+          icon: "🎥",
+          title: "HD Cameras",
+          desc: "High-resolution imaging"
+        },
+        {
+          icon: "🔒",
+          title: "Secure Storage",
+          desc: "Encrypted data storage"
+        }
+      ],
+      specs: [
+        "AI-Powered Analytics",
+        "4K Camera Support",
+        "Cloud Integration",
+        "256-bit Encryption",
+        "Real-time Alerts",
+        "Custom Reporting"
+      ]
+    }
+  },
+  id: {
+    integra: {
+      name: "FORLUX Integra",
+      description: "Sistem kontrol lalu lintas pintar revolusioner yang didukung teknologi ARM Cortex M4, memberikan keandalan dan kontrol real-time yang tak tertandingi.",
+      badge: "Buatan Indonesia",
+      gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
+      features: [
+        {
+          icon: "🔧",
+          title: "ARM Cortex M4",
+          desc: "Prosesor seri T7 kelas industri"
+        },
+        {
+          icon: "🔄",
+          title: "Desain Hot-Swappable",
+          desc: "Pemeliharaan tanpa downtime"
+        },
+        {
+          icon: "📡",
+          title: "Jaringan Fiber",
+          desc: "Transmisi data kecepatan tinggi"
+        },
+        {
+          icon: "⚡",
+          title: "Kontrol Real-time",
+          desc: "Respons dan pemantauan instan"
+        }
+      ],
+      specs: [
+        "Prosesor ARM Cortex M4",
+        "Komponen Kelas Industri",
+        "Perlindungan Cuaca IP65",
+        "Siap Fiber Optik",
+        "Modul Hot-Swappable",
+        "Pemantauan Real-time"
+      ]
+    }
+    // Add other products in Indonesian...
+  }
+};
+
+// Common translations
+const translations = {
+  en: {
+    features: "Features",
+    keyFeatures: "Key Features",
+    discoverCapabilities: "Discover the capabilities",
+    specifications: "Specifications",
+    technicalDetails: "Technical Details",
+    ctaTitle: "Ready to Transform Your Traffic Management?",
+    ctaDescription: "Schedule a demo to see how our solutions can work for your city",
+    scheduleDemo: "Schedule Demo"
+  },
+  id: {
+    features: "Fitur",
+    keyFeatures: "Fitur Utama",
+    discoverCapabilities: "Temukan kemampuannya",
+    specifications: "Spesifikasi",
+    technicalDetails: "Detail Teknis",
+    ctaTitle: "Siap Mengubah Manajemen Lalu Lintas Anda?",
+    ctaDescription: "Jadwalkan demo untuk melihat bagaimana solusi kami dapat bekerja untuk kota Anda",
+    scheduleDemo: "Jadwalkan Demo"
+  }
+};
+
 const { id } = Astro.params;
-const { translations, products } = await getProduct(id);
-// Get the default product data (English version)
-const defaultProduct = products.en[id];
+const initialLang = currentLanguage.get() || 'en';
+const defaultProduct = products[initialLang][id];
 ---
 
 <Layout title={defaultProduct.name}>

@@ -1,142 +1,12 @@
 ---
 import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
 
 // Get initial language for SSR
 const initialLang = currentLanguage.get();
 
-// Translation data
-const translations = {
-  en: {
-    title: "Engineered for Excellence",
-    subtitle: "Advanced Technology",
-    description: "Discover the cutting-edge technologies that make FORLUX the most advanced traffic management system in Indonesia",
-    certTitle: {
-      title: "Certified Excellence",
-      description: "Meeting international standards while prioritizing Indonesian manufacturing"
-    },
-    features: [
-      {
-        icon: "🔬",
-        title: "ARM Cortex M4 Technology",
-        description: "High-performance industrial-grade processor designed for demanding traffic control applications.",
-        details: [
-          "T7 series high-temperature certified",
-          "Industrial-grade reliability",
-          "Advanced real-time processing",
-          "Optimized power efficiency"
-        ]
-      },
-      {
-        icon: "🔄",
-        title: "Hot-Swappable Design",
-        description: "Revolutionary modular architecture enabling maintenance without system downtime.",
-        details: [
-          "Zero downtime maintenance",
-          "Quick component replacement",
-          "Plug-and-play modules",
-          "Future-proof expandability"
-        ]
-      },
-      {
-        icon: "🌐",
-        title: "Fiber Network Integration",
-        description: "High-speed fiber optic network for reliable, real-time traffic management.",
-        details: [
-          "Ultra-low latency",
-          "Secure data transmission",
-          "Remote system updates",
-          "Redundant connectivity"
-        ]
-      }
-    ],
-    certs: [
-      {
-        icon: "🏆",
-        title: "TKDN Certified",
-        value: "> 60%",
-        description: "High local content certification, supporting Indonesian industry"
-      },
-      {
-        icon: "🔒",
-        title: "ISO 27001",
-        value: "Certified",
-        description: "International security management standard"
-      },
-      {
-        icon: "⚡",
-        title: "IEC 61508",
-        value: "SIL 2",
-        description: "Functional safety for electronic systems"
-      }
-    ]
-  },
-  id: {
-    title: "Direkayasa untuk Keunggulan",
-    subtitle: "Teknologi Canggih",
-    description: "Temukan teknologi mutakhir yang menjadikan FORLUX sistem manajemen lalu lintas paling canggih di Indonesia",
-    certTitle: {
-      title: "Keunggulan Tersertifikasi",
-      description: "Memenuhi standar internasional sambil memprioritaskan manufaktur Indonesia"
-    },
-    features: [
-      {
-        icon: "🔬",
-        title: "Teknologi ARM Cortex M4",
-        description: "Prosesor kelas industri berkinerja tinggi yang dirancang untuk aplikasi kontrol lalu lintas yang menuntut.",
-        details: [
-          "Sertifikasi suhu tinggi seri T7",
-          "Keandalan kelas industri",
-          "Pemrosesan real-time canggih",
-          "Efisiensi daya optimal"
-        ]
-      },
-      {
-        icon: "🔄",
-        title: "Desain Hot-Swappable",
-        description: "Arsitektur modular revolusioner yang memungkinkan pemeliharaan tanpa downtime sistem.",
-        details: [
-          "Pemeliharaan tanpa downtime",
-          "Penggantian komponen cepat",
-          "Modul plug-and-play",
-          "Kemampuan ekspansi masa depan"
-        ]
-      },
-      {
-        icon: "🌐",
-        title: "Integrasi Jaringan Fiber",
-        description: "Jaringan fiber optik berkecepatan tinggi untuk manajemen lalu lintas yang andal dan real-time.",
-        details: [
-          "Latensi ultra-rendah",
-          "Transmisi data aman",
-          "Pembaruan sistem jarak jauh",
-          "Konektivitas redundan"
-        ]
-      }
-    ],
-    certs: [
-      {
-        icon: "🏆",
-        title: "Tersertifikasi TKDN",
-        value: "> 60%",
-        description: "Sertifikasi konten lokal tinggi, mendukung industri Indonesia"
-      },
-      {
-        icon: "🔒",
-        title: "ISO 27001",
-        value: "Tersertifikasi",
-        description: "Standar manajemen keamanan internasional"
-      },
-      {
-        icon: "⚡",
-        title: "IEC 61508",
-        value: "SIL 2",
-        description: "Keamanan fungsional untuk sistem elektronik"
-      }
-    ]
-  }
-};
-
-const content = translations[initialLang];
+// Add translations to the existing translations object in utils/translations.js:
+const content = translations[initialLang].products.features;
 ---
 
 <section class="relative py-32">
@@ -159,7 +29,7 @@ const content = translations[initialLang];
 
     <!-- Core Features -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-      {content.features.map((feature, index) => (
+      {content.coreFeatures.map((feature, index) => (
         <div 
           class="glass-card p-6"
           data-aos="fade-up"
@@ -193,15 +63,15 @@ const content = translations[initialLang];
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12" data-aos="fade-up">
         <h3 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient" id="certifications-title">
-          {content.certTitle.title}
+          {content.certifications.title}
         </h3>
         <p class="text-gray-400" id="certifications-description">
-          {content.certTitle.description}
+          {content.certifications.description}
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {content.certs.map((cert, index) => (
+        {content.certifications.items.map((cert, index) => (
           <div 
             class="glass-card p-6 text-center"
             data-aos="zoom-in"
@@ -219,12 +89,12 @@ const content = translations[initialLang];
     </div>
   </div>
 </section>
-
-<script define:vars={{ translations }}>
+<script>
   import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
 
   function updateContent(lang) {
-    const content = translations[lang];
+    const content = translations[lang].products.features;
 
     // Update main content
     document.getElementById('features-subtitle').textContent = content.subtitle;
@@ -232,7 +102,7 @@ const content = translations[initialLang];
     document.getElementById('features-description').textContent = content.description;
 
     // Update features
-    content.features.forEach((feature, index) => {
+    content.coreFeatures.forEach((feature, index) => {
       document.getElementById(`feature-${index}-title`).textContent = feature.title;
       document.getElementById(`feature-${index}-description`).textContent = feature.description;
       feature.details.forEach((detail, detailIndex) => {
@@ -241,10 +111,10 @@ const content = translations[initialLang];
     });
 
     // Update certifications
-    document.getElementById('certifications-title').textContent = content.certTitle.title;
-    document.getElementById('certifications-description').textContent = content.certTitle.description;
+    document.getElementById('certifications-title').textContent = content.certifications.title;
+    document.getElementById('certifications-description').textContent = content.certifications.description;
 
-    content.certs.forEach((cert, index) => {
+    content.certifications.items.forEach((cert, index) => {
       document.getElementById(`cert-${index}-value`).textContent = cert.value;
       document.getElementById(`cert-${index}-title`).textContent = cert.title;
       document.getElementById(`cert-${index}-description`).textContent = cert.description;
@@ -252,7 +122,6 @@ const content = translations[initialLang];
   }
 
   function initFeatures() {
-    updateContent(currentLanguage.get());
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });

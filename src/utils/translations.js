@@ -500,28 +500,28 @@ export const translations = {
         core: {
           title: "Core Features",
           features: [
-            { id: "detection", name: "Traffic Detection" },
+            { id: "detection", name: "Vehicle Detection" },
             { id: "monitoring", name: "Real-time Monitoring" },
-            { id: "analytics", name: "AI-powered Analytics" },
-            { id: "predictive", name: "Predictive Control" }
+            { id: "analytics", name: "Advanced Analytics" },
+            { id: "predictive", name: "Predictive AI" }
           ]
         },
         technical: {
-          title: "Technical Specs",
+          title: "Technical Specifications",
           features: [
-            { id: "processor", name: "ARM Cortex M4" },
+            { id: "processor", name: "ARM Cortex M4 Processor" },
             { id: "modules", name: "Hot-swappable Modules" },
-            { id: "network", name: "Fiber Network Ready" },
-            { id: "edge", name: "Edge Processing" }
+            { id: "network", name: "Fiber Network Support" },
+            { id: "edge", name: "Edge Computing" }
           ]
         },
         support: {
-          title: "Support & Service",
+          title: "Support & Maintenance",
           features: [
             { id: "support247", name: "24/7 Local Support" },
             { id: "diagnostics", name: "Remote Diagnostics" },
             { id: "maintenance", name: "Predictive Maintenance" },
-            { id: "integration", name: "Custom Integration" }
+            { id: "integration", name: "Legacy Integration" }
           ]
         }
       }
@@ -604,6 +604,73 @@ export const translations = {
         iso: "ISO 27001 Certified",
         arm: "Official Partner",
         support: "Local Support"
+      }
+    },
+
+    products: {
+      features: {
+        subtitle: "Advanced Technology",
+        title: "Engineered for Excellence",
+        description: "Discover the cutting-edge technologies that make FORLUX the most advanced traffic management system in Indonesia",
+        coreFeatures: [
+          {
+            icon: "🔬",
+            title: "ARM Cortex M4 Technology",
+            description: "High-performance industrial-grade processor designed for demanding traffic control applications.",
+            details: [
+              "T7 series high-temperature certified",
+              "Industrial-grade reliability",
+              "Advanced real-time processing",
+              "Optimized power efficiency"
+            ]
+          },
+          {
+            icon: "🔄",
+            title: "Hot-Swappable Design",
+            description: "Revolutionary modular architecture enabling maintenance without system downtime.",
+            details: [
+              "Zero downtime maintenance",
+              "Quick component replacement",
+              "Plug-and-play modules",
+              "Future-proof expandability"
+            ]
+          },
+          {
+            icon: "🌐",
+            title: "Fiber Network Integration",
+            description: "High-speed fiber optic network for reliable, real-time traffic management.",
+            details: [
+              "Ultra-low latency",
+              "Secure data transmission",
+              "Remote system updates",
+              "Redundant connectivity"
+            ]
+          }
+        ],
+        certifications: {
+          title: "Certified Excellence",
+          description: "Meeting international standards while prioritizing Indonesian manufacturing",
+          items: [
+            {
+              icon: "🏆",
+              title: "TKDN Certified",
+              value: "> 60%",
+              description: "High local content certification, supporting Indonesian industry"
+            },
+            {
+              icon: "🔒",
+              title: "ISO 27001",
+              value: "Certified",
+              description: "International security management standard"
+            },
+            {
+              icon: "⚡",
+              title: "IEC 61508",
+              value: "SIL 2",
+              description: "Functional safety for electronic systems"
+            }
+          ]
+        }
       }
     }
   },
@@ -1055,28 +1122,28 @@ export const translations = {
         core: {
           title: "Fitur Utama",
           features: [
-            { id: "detection", name: "Deteksi Lalu Lintas" },
+            { id: "detection", name: "Deteksi Kendaraan" },
             { id: "monitoring", name: "Pemantauan Real-time" },
-            { id: "analytics", name: "Analitik Berbasis AI" },
-            { id: "predictive", name: "Kontrol Prediktif" }
+            { id: "analytics", name: "Analitik Lanjutan" },
+            { id: "predictive", name: "AI Prediktif" }
           ]
         },
         technical: {
           title: "Spesifikasi Teknis",
           features: [
-            { id: "processor", name: "ARM Cortex M4" },
+            { id: "processor", name: "Prosesor ARM Cortex M4" },
             { id: "modules", name: "Modul Hot-swappable" },
-            { id: "network", name: "Siap Jaringan Fiber" },
-            { id: "edge", name: "Pemrosesan Edge" }
+            { id: "network", name: "Dukungan Jaringan Fiber" },
+            { id: "edge", name: "Komputasi Edge" }
           ]
         },
         support: {
-          title: "Dukungan & Layanan",
+          title: "Dukungan & Pemeliharaan",
           features: [
             { id: "support247", name: "Dukungan Lokal 24/7" },
             { id: "diagnostics", name: "Diagnostik Jarak Jauh" },
             { id: "maintenance", name: "Pemeliharaan Prediktif" },
-            { id: "integration", name: "Integrasi Kustom" }
+            { id: "integration", name: "Integrasi Legacy" }
           ]
         }
       }
@@ -1092,15 +1159,15 @@ export const translations = {
       items: {
         panel: {
           title: "Panel Kontrol",
-          description: "Panel kontrol lalu lintas canggih dengan desain modular untuk pemeliharaan dan peningkatan yang mudah."
+          description: "Panel kontrol lalu lintas canggih dengan antarmuka intuitif dan kemampuan pemantauan real-time."
         },
         luminox: {
           title: "Sistem Luminox",
           description: "Sistem kontrol pencahayaan cerdas untuk efisiensi energi dan visibilitas optimal."
         },
         SmartView: {
-          title: "Antarmuka SmartView",
-          description: "Dashboard pemantauan komprehensif dengan analitik dan kemampuan kontrol real-time."
+          title: "Smart View",
+          description: "Sistem pemantauan lalu lintas komprehensif dengan analitik bertenaga AI dan kemampuan prediktif."
         }
       }
     },
@@ -1159,6 +1226,73 @@ export const translations = {
         iso: "Tersertifikasi 27001",
         arm: "Partner Resmi",
         support: "Dukungan Lokal"
+      }
+    },
+
+    products: {
+      features: {
+        subtitle: "Teknologi Canggih",
+        title: "Direkayasa untuk Keunggulan",
+        description: "Temukan teknologi mutakhir yang menjadikan FORLUX sistem manajemen lalu lintas paling canggih di Indonesia",
+        coreFeatures: [
+          {
+            icon: "🔬",
+            title: "Teknologi ARM Cortex M4",
+            description: "Prosesor kelas industri berkinerja tinggi yang dirancang untuk aplikasi kontrol lalu lintas yang menuntut.",
+            details: [
+              "Sertifikasi suhu tinggi seri T7",
+              "Keandalan kelas industri",
+              "Pemrosesan real-time canggih",
+              "Efisiensi daya optimal"
+            ]
+          },
+          {
+            icon: "🔄",
+            title: "Desain Hot-Swappable",
+            description: "Arsitektur modular revolusioner yang memungkinkan pemeliharaan tanpa downtime sistem.",
+            details: [
+              "Pemeliharaan tanpa downtime",
+              "Penggantian komponen cepat",
+              "Modul plug-and-play",
+              "Kemampuan ekspansi masa depan"
+            ]
+          },
+          {
+            icon: "🌐",
+            title: "Integrasi Jaringan Fiber",
+            description: "Jaringan fiber optik berkecepatan tinggi untuk manajemen lalu lintas yang andal dan real-time.",
+            details: [
+              "Latensi ultra-rendah",
+              "Transmisi data aman",
+              "Pembaruan sistem jarak jauh",
+              "Konektivitas redundan"
+            ]
+          }
+        ],
+        certifications: {
+          title: "Keunggulan Tersertifikasi",
+          description: "Memenuhi standar internasional sambil memprioritaskan manufaktur Indonesia",
+          items: [
+            {
+              icon: "🏆",
+              title: "Tersertifikasi TKDN",
+              value: "> 60%",
+              description: "Sertifikasi konten lokal tinggi, mendukung industri Indonesia"
+            },
+            {
+              icon: "🔒",
+              title: "ISO 27001",
+              value: "Tersertifikasi",
+              description: "Standar manajemen keamanan internasional"
+            },
+            {
+              icon: "⚡",
+              title: "IEC 61508",
+              value: "SIL 2",
+              description: "Keamanan fungsional untuk sistem elektronik"
+            }
+          ]
+        }
       }
     }
   }

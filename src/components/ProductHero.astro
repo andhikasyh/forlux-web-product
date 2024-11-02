@@ -1,9 +1,62 @@
 ---
 import { currentLanguage } from '../stores/languageStore';
-import { translations } from '../utils/translations';
 
-// Initial language value for SSR
-const initialLang = currentLanguage.get();
+// Initial language value for SSR with fallback
+const initialLang = currentLanguage.get() || 'en';
+
+// Hardcoded translations
+const translations = {
+  en: {
+    hero: {
+      badge: "International Quality, Indonesian Pride",
+      title1: "Revolutionizing",
+      title2: "Traffic Management",
+      description: "FORLUX, Indonesia's first AI-powered traffic system."
+    },
+    products: {
+      items: {
+        panel: {
+          title: "FORLUX Control Panel",
+          description: "Revolutionary smart traffic control system powered by ARM Cortex M4 technology, delivering unmatched reliability and real-time control."
+        },
+        luminox: {
+          title: "FORLUX LuminoX",
+          description: "High-performance traffic light system with advanced Fresnel Lens technology for optimal visibility and energy efficiency."
+        },
+        SmartView: {
+          title: "FORLUX SmartView",
+          description: "Advanced AI-powered traffic monitoring system that transforms raw footage into actionable insights."
+        }
+      }
+    }
+  },
+  id: {
+    hero: {
+      badge: "Kualitas Internasional, Kebanggaan Indonesia",
+      title1: "Revolusi",
+      title2: "Manajemen Lalu Lintas",
+      description: "FORLUX, sistem lalu lintas berbasis AI pertama di Indonesia."
+    },
+    products: {
+      items: {
+        panel: {
+          title: "Panel Kontrol FORLUX",
+          description: "Sistem kontrol lalu lintas pintar revolusioner yang didukung teknologi ARM Cortex M4, memberikan keandalan dan kontrol real-time yang tak tertandingi."
+        },
+        luminox: {
+          title: "FORLUX LuminoX",
+          description: "Sistem lampu lalu lintas berkinerja tinggi dengan teknologi Fresnel Lens canggih untuk visibilitas dan efisiensi energi optimal."
+        },
+        SmartView: {
+          title: "FORLUX SmartView",
+          description: "Sistem pemantauan lalu lintas bertenaga AI canggih yang mengubah rekaman mentah menjadi wawasan yang dapat ditindaklanjuti."
+        }
+      }
+    }
+  }
+};
+
+const heroContent = translations[initialLang].hero;
 ---
 
 <section class="relative min-h-[40vh] flex items-center justify-center py-32 overflow-hidden" id="product-hero">
@@ -20,7 +73,7 @@ const initialLang = currentLanguage.get();
           class="inline-block px-4 py-2 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20"
           id="hero-label"
         >
-          Discover Our Products
+          {heroContent.badge}
         </span>
       </div>
 
@@ -33,10 +86,10 @@ const initialLang = currentLanguage.get();
           class="bg-clip-text text-transparent bg-forlux-orange-gradient"
           id="hero-title-1"
         >
-          Smart Traffic Solutions
+          {heroContent.title1}
         </span>
         <br />
-        <span id="hero-title-2">for Modern Cities</span>
+        <span id="hero-title-2">{heroContent.title2}</span>
       </h1>
 
       <p 
@@ -45,27 +98,9 @@ const initialLang = currentLanguage.get();
         data-aos-delay="200"
         id="hero-description"
       >
-        Experience the future of traffic management with our comprehensive suite of intelligent solutions, proudly engineered and manufactured in Indonesia.
+        {heroContent.description}
       </p>
     </div>
-  </div>
-
-  <!-- Animated Traffic Elements -->
-  <div class="absolute inset-0 pointer-events-none overflow-hidden">
-    <!-- Traffic Grid Lines -->
-    <div class="traffic-grid absolute inset-0 opacity-20"></div>
-    
-    <!-- Animated Dots (representing traffic/data flow) -->
-    <div class="data-flow-container">
-      {Array(10).fill(0).map((_, i) => (
-        <div class={`data-point data-point-${i}`}></div>
-      ))}
-    </div>
-
-    <!-- Connection Lines -->
-    <svg class="absolute inset-0 w-full h-full connection-lines opacity-20">
-      <path class="connection-path" d="M0 0" />
-    </svg>
   </div>
 </section>
 
@@ -400,4 +435,5 @@ const initialLang = currentLanguage.get();
       stroke-width: 1;
     }
   }
+</style>
 </style>
