@@ -1,41 +1,111 @@
 ---
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
+const locations = [
+  { id: 'jakarta', projects: '25+' },
+  { id: 'surabaya', projects: '15+' },
+  { id: 'medan', projects: '10+' },
+  { id: 'makassar', projects: '8+' }
+];
 ---
 
-<section class="py-32 relative">
+<section class="py-32 relative" id="location-section">
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-radial from-blue-500/10 to-transparent opacity-30 blur-3xl"></div>
   </div>
   
   <div class="container mx-auto px-4 relative z-10">
     <div class="text-center mb-16">
-      <span class="inline-block px-4 py-1 text-sm font-medium text-blue-200 bg-blue-500/10 rounded-full border border-blue-500/20 mb-4">
+      <span 
+        class="inline-block px-4 py-1 text-sm font-medium text-blue-200 bg-blue-500/10 rounded-full border border-blue-500/20 mb-4"
+        id="presence-label"
+      >
         Our Presence
       </span>
-      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+      <h2 
+        class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
+        id="presence-title"
+      >
         Serving Cities Across Indonesia
       </h2>
-      <p class="text-gray-400 max-w-2xl mx-auto">
+      <p 
+        class="text-gray-400 max-w-2xl mx-auto"
+        id="presence-description"
+      >
         With a strong presence across major cities, we're transforming urban infrastructure throughout Indonesia
       </p>
     </div>
     
     <div class="glass-card p-8">      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-        {[
-          { city: 'Jakarta', projects: '25+', description: 'Smart traffic systems' },
-          { city: 'Surabaya', projects: '15+', description: 'Street lighting' },
-          { city: 'Medan', projects: '10+', description: 'Urban analytics' },
-          { city: 'Makassar', projects: '8+', description: 'Infrastructure' }
-        ].map(location => (
+        {locations.map(location => (
           <div class="text-center p-6 rounded-xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 border border-white/5">
-            <h3 class="text-xl font-bold text-white mb-2">{location.city}</h3>
+            <h3 
+              class="text-xl font-bold text-white mb-2"
+              id={`city-${location.id}`}
+            >
+              Loading...
+            </h3>
             <p class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
               {location.projects}
             </p>
-            <p class="text-sm text-gray-400">{location.description}</p>
+            <p 
+              class="text-sm text-gray-400"
+              id={`description-${location.id}`}
+            >
+              Loading...
+            </p>
           </div>
         ))}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].location;
+
+    // Update header content
+    document.getElementById('presence-label').textContent = t.label;
+    document.getElementById('presence-title').textContent = t.title;
+    document.getElementById('presence-description').textContent = t.description;
+
+    // Update city information
+    Object.keys(t.cities).forEach(cityId => {
+      const city = t.cities[cityId];
+      document.getElementById(`city-${cityId}`).textContent = city.name;
+      document.getElementById(`description-${cityId}`).textContent = city.description;
+    });
+  }
+
+  function initLocationSection() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initLocationSection();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

@@ -1,33 +1,55 @@
 ---
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
 const testimonials = [
   {
-    name: 'John Smith',
-    role: 'CEO, Tech Corp',
-    content: 'Working with Caturmukti has transformed our business operations.',
+    id: "john",
     image: '/testimonials/john.jpg'
   },
   {
-    name: 'Sarah Johnson',
-    role: 'Director, Innovation Labs',
-    content: 'Their expertise and dedication to excellence is unmatched.',
+    id: "sarah",
     image: '/testimonials/sarah.jpg'
   }
 ];
 ---
 
-<section class="py-20 bg-gray-50">
+<section class="py-20 bg-gray-50" id="testimonials-section">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
-      <h2 class="text-3xl font-bold text-gray-900">What Our Clients Say</h2>
+      <h2 
+        class="text-3xl font-bold text-gray-900"
+        id="testimonials-title"
+      >
+        What Our Clients Say
+      </h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       {testimonials.map(testimonial => (
         <div class="bg-white p-8 rounded-lg shadow-md">
-          <p class="text-gray-600 mb-6">"{testimonial.content}"</p>
+          <p 
+            class="text-gray-600 mb-6"
+            id={`testimonial-content-${testimonial.id}`}
+          >
+            Loading...
+          </p>
           <div class="flex items-center">
             <div class="ml-4">
-              <p class="font-bold">{testimonial.name}</p>
-              <p class="text-gray-600">{testimonial.role}</p>
+              <p 
+                class="font-bold"
+                id={`testimonial-name-${testimonial.id}`}
+              >
+                Loading...
+              </p>
+              <p 
+                class="text-gray-600"
+                id={`testimonial-role-${testimonial.id}`}
+              >
+                Loading...
+              </p>
             </div>
           </div>
         </div>
@@ -35,3 +57,37 @@ const testimonials = [
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].testimonials;
+
+    // Update title
+    document.getElementById('testimonials-title').textContent = t.title;
+
+    // Update testimonials
+    t.items.forEach(testimonial => {
+      document.getElementById(`testimonial-content-${testimonial.id}`).textContent = `"${testimonial.content}"`;
+      document.getElementById(`testimonial-name-${testimonial.id}`).textContent = testimonial.name;
+      document.getElementById(`testimonial-role-${testimonial.id}`).textContent = testimonial.role;
+    });
+  }
+
+  function initTestimonials() {
+    updateContent(currentLanguage.get());
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+    return unsubscribe;
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initTestimonials();
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

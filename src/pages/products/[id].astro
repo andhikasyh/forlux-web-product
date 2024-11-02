@@ -1,93 +1,157 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getProduct } from '../../utils/products';
+import { currentLanguage } from '../../stores/languageStore';
 
 export async function getStaticPaths() {
-  // Define all possible product IDs
-  const productIds = ['integra', 'luminox', 'intellicam', 'samson'];
-  
+  const productIds = ['integra', 'luminox', 'smartview', 'samson'];
   return productIds.map(id => ({
     params: { id },
   }));
 }
 
 const { id } = Astro.params;
-const product = await getProduct(id);
-
-if (!product) return Astro.redirect('/404');
+const { translations, products } = await getProduct(id);
+// Get the default product data (English version)
+const defaultProduct = products.en[id];
 ---
 
-<Layout title={product.name}>
+<Layout title={defaultProduct.name}>
   <div class="pt-16">
-    {/* Hero Section */}
-    <section class="py-20 relative">
+    <section class="py-32 relative overflow-hidden min-h-[80vh] flex items-center">
       <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/10 to-transparent opacity-30 blur-3xl"></div>
+        <div class="absolute inset-0 backdrop-blur-sm bg-white/5"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-white/10 to-transparent rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-white/10 to-transparent rounded-full mix-blend-overlay filter blur-3xl animate-float-delayed"></div>
+        <div class={`absolute inset-0 bg-gradient-to-br ${defaultProduct.gradient} opacity-5`}></div>
       </div>
 
       <div class="container mx-auto px-4 relative">
-        <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-          {product.badge && (
-            <span class={`inline-block px-4 py-1 text-sm font-medium bg-gradient-to-r ${product.gradient} bg-clip-text text-transparent rounded-full border border-current mb-4`}>
-              {product.badge}
-            </span>
-          )}
-          <h1 class={`text-4xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
-            {product.name}
-          </h1>
-          <p class="text-xl text-gray-300 leading-relaxed">
-            {product.description}
-          </p>
+        <div class="max-w-7xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="order-2 lg:order-1" data-aos="fade-right">
+              <div 
+                class="space-y-8"
+                id="product-content"
+                data-product-id={id}
+              >
+                {defaultProduct.badge && (
+                  <div class="animate-pulse-slow">
+                    <span class="inline-flex items-center px-4 py-1 text-sm font-medium rounded-full border shadow-glow">
+                      <span class="text-base mr-2">🇮🇩</span>
+                      <span class={`bg-gradient-to-r ${defaultProduct.gradient} bg-clip-text text-transparent`}>
+                        {defaultProduct.badge}
+                      </span>
+                    </span>
+                  </div>
+                )}
+                <h1 class={`text-4xl sm:text-5xl xl:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${defaultProduct.gradient} leading-tight tracking-tight animate-gradient`}>
+                  {defaultProduct.name}
+                </h1>
+                <p class="text-xl text-gray-300 leading-relaxed">
+                  {defaultProduct.description}
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                  <a 
+                    href="/contact" 
+                    class={`group inline-flex items-center px-8 py-4 rounded-lg text-white bg-gradient-to-r ${defaultProduct.gradient} hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-glow`}
+                  >
+                    <span data-translate="scheduleDemo" class="font-medium">Schedule Demo</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="order-1 lg:order-2" data-aos="fade-left">
+              {id === 'integra' ? (
+                <div class="grid grid-cols-2 gap-6 perspective">
+                  {['/forlux-panel-1.png', '/forlux-panel-2.png'].map((src, index) => (
+                    <div class="relative group hover:z-10">
+                      <div class="absolute inset-0 backdrop-blur-sm bg-white/5 rounded-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-y-12"></div>
+                      <img 
+                        src={src}
+                        alt={`FORLUX Integra Panel ${index + 1}`}
+                        class="relative z-10 w-full rounded-2xl shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div class="relative group perspective hover:z-10">
+                  <div class="absolute inset-0 backdrop-blur-sm bg-white/5 rounded-2xl transform transition-all duration-500 group-hover:rotate-y-12"></div>
+                  <img 
+                    src={`/${id}.png`}
+                    alt={`FORLUX ${defaultProduct.name}`}
+                    class="relative z-10 w-full rounded-2xl shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    {/* Features Grid */}
-    <section class="py-20 relative bg-slate-900/50">
+    <div 
+      id="translation-data" 
+      data-translations={JSON.stringify(translations)}
+      data-products={JSON.stringify(products)}
+    ></div>
+
+    <section id="features" class="py-32 relative bg-slate-900/50">
       <div class="container mx-auto px-4">
         <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class={`text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
-            Key Features
+          <span data-translate="features" class="inline-block px-4 py-1 text-sm font-medium bg-gradient-to-r ${defaultProduct.gradient} bg-clip-text text-transparent rounded-full border border-current mb-4">
+          </span>
+          <h2 data-translate="keyFeatures" class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${defaultProduct.gradient}">
           </h2>
+          <p data-translate="discoverCapabilities" class="text-gray-400 max-w-2xl mx-auto">
+            <span data-product-translate="description"></span>
+          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {product.features.map((feature, index) => (
+          {defaultProduct.features.map((feature, index) => (
             <div 
-              class="glass-card p-6"
+              class="glass-card p-8 group hover:transform hover:scale-105 transition-all duration-300"
               data-aos="fade-up"
               data-aos-delay={index * 100}
             >
-              <span class="text-3xl mb-4 block">{feature.icon}</span>
-              <h3 class="text-lg font-bold text-white mb-2">{feature.title}</h3>
-              <p class="text-gray-400 text-sm">{feature.desc}</p>
+              <div class={`w-12 h-12 rounded-lg flex items-center justify-center mb-6 bg-gradient-to-r ${defaultProduct.gradient} bg-opacity-10 group-hover:scale-110 transition-transform duration-300`}>
+                <span class="text-2xl">{feature.icon}</span>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-3">{feature.title}</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">{feature.desc}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    {/* Technical Specifications */}
-    <section class="py-20 relative">
+    <section class="py-32 relative">
       <div class="container mx-auto px-4">
-        <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class={`text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
-            Technical Specifications
-          </h2>
-        </div>
+        <div class="max-w-5xl mx-auto">
+          <div class="text-center mb-16" data-aos="fade-up">
+            <span data-translate="specifications" class="inline-block px-4 py-1 text-sm font-medium bg-gradient-to-r ${defaultProduct.gradient} bg-clip-text text-transparent rounded-full border border-current mb-4">
+            </span>
+            <h2 data-translate="technicalDetails" class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${defaultProduct.gradient}">
+            </h2>
+          </div>
 
-        <div class="max-w-3xl mx-auto">
           <div class="glass-card p-8">
-            <div class="space-y-6">
-              {product.specs.map((spec, index) => (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {defaultProduct.specs.map((spec, index) => (
                 <div 
-                  class="flex items-start space-x-4"
+                  class="flex items-start space-x-4 group"
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
-                  <div class={`w-1.5 h-1.5 rounded-full mt-2 bg-gradient-to-r ${product.gradient}`}></div>
+                  <div class={`w-2 h-2 rounded-full mt-2 bg-gradient-to-r ${defaultProduct.gradient} group-hover:scale-150 transition-transform duration-300`}></div>
                   <div>
-                    <h4 class="text-white font-medium mb-1">{spec}</h4>
+                    <h4 class="text-white font-medium">{spec}</h4>
                   </div>
                 </div>
               ))}
@@ -97,24 +161,225 @@ if (!product) return Astro.redirect('/404');
       </div>
     </section>
 
-    {/* Call to Action */}
-    <section class="py-20 relative bg-slate-900/50">
+    <section class="py-32 relative bg-slate-900/50">
       <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center">
-          <h2 class="text-3xl font-bold mb-6 text-white">
-            Ready to Transform Your Traffic System?
-          </h2>
-          <p class="text-gray-400 mb-8">
-            Contact our team to schedule a demo and learn how {product.name} can revolutionize your city's infrastructure.
-          </p>
-          <a 
-            href="/contact" 
-            class={`inline-block px-8 py-3 rounded-lg text-white bg-gradient-to-r ${product.gradient} hover:opacity-90 transition-opacity duration-300`}
-          >
-            Schedule Demo
-          </a>
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="glass-card p-12 relative overflow-hidden group">
+            <div class="absolute inset-0">
+              <div class={`absolute inset-0 bg-gradient-to-r ${defaultProduct.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+            </div>
+            <div class="relative z-10">
+              <h2 data-translate="ctaTitle" class="text-4xl font-bold mb-6 text-white">
+              </h2>
+              <p data-translate="ctaDescription" class="text-gray-400 mb-8 text-lg">
+              </p>
+              <a 
+                href="/contact" 
+                class={`inline-flex items-center px-8 py-4 rounded-lg text-white bg-gradient-to-r ${defaultProduct.gradient} hover:opacity-90 transition-all duration-300 transform hover:scale-105`}
+              >
+                <span data-translate="scheduleDemo">Schedule Demo</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </div>
 </Layout>
+
+<script>
+  import { currentLanguage } from '../../stores/languageStore';
+
+  function updateContent() {
+    const translationData = document.getElementById('translation-data') as HTMLElement;
+    if (!translationData) return;
+
+    const translations = JSON.parse(translationData.dataset.translations || '{}');
+    const products = JSON.parse(translationData.dataset.products || '{}');
+    const productContent = document.getElementById('product-content') as HTMLElement;
+    if (!productContent) return;
+
+    const productId = productContent.dataset.productId;
+    const lang = currentLanguage.get();
+    const t = translations[lang];
+    const product = products[lang][productId];
+
+    if (!product) return;
+
+    // Update product name and description
+    const nameElement = productContent.querySelector('h1');
+    const descElement = productContent.querySelector('p');
+    const badgeElement = productContent.querySelector('span');
+
+    if (nameElement) nameElement.textContent = product.name;
+    if (descElement) descElement.textContent = product.description;
+    if (badgeElement && product.badge) badgeElement.textContent = product.badge;
+
+    // Update features
+    const features = document.querySelectorAll('.glass-card');
+    features.forEach((card, index) => {
+      const feature = product.features[index];
+      if (!feature) return;
+
+      const title = card.querySelector('h3');
+      const desc = card.querySelector('p');
+      const icon = card.querySelector('.text-2xl');
+
+      if (title) title.textContent = feature.title;
+      if (desc) desc.textContent = feature.desc;
+      if (icon) icon.textContent = feature.icon;
+    });
+
+    // Update specs
+    const specs = document.querySelectorAll('.specs-container h4');
+    specs.forEach((spec, index) => {
+      if (product.specs[index]) {
+        spec.textContent = product.specs[index];
+      }
+    });
+
+    // Update translations
+    document.querySelectorAll('[data-translate]').forEach((element) => {
+      const el = element as HTMLElement;
+      const key = el.dataset.translate;
+      if (t[key]) {
+        el.textContent = t[key];
+      }
+    });
+  }
+
+  // Update content when language changes
+  currentLanguage.subscribe(() => {
+    requestAnimationFrame(updateContent);
+  });
+
+  // Initial update
+  document.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(updateContent);
+  });
+</script>
+
+<style>
+  .perspective {
+    perspective: 1000px;
+  }
+  
+  .rotate-y-12 {
+    transform: rotateY(12deg);
+  }
+  
+  img {
+    max-height: 400px;
+    object-fit: contain;
+    width: 100%;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  [data-changing] {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .feature-icon {
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover .feature-icon {
+    transform: scale(1.2);
+  }
+
+  .gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .gradient-text:hover {
+    opacity: 0.9;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(255, 255, 255, 0.05);
+  }
+</style>
+
+<!-- Add this component -->
+<div 
+  id="language-loading" 
+  class="fixed top-4 right-4 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-sm text-white opacity-0 transition-opacity duration-300"
+>
+  Updating content...
+</div>

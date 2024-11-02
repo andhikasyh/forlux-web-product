@@ -1,9 +1,21 @@
 ---
 import { Image } from 'astro:assets';
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
+const stats = [
+  { id: "tkdn", value: "TKDN" },
+  { id: "iso", value: "ISO" },
+  { id: "arm", value: "ARM" },
+  { id: "support", value: "24/7" }
+];
 ---
 
-<section class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden py-16 sm:py-20 lg:py-32">
-  <!-- Background effects remain the same -->
+<section class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden py-16 sm:py-20 lg:py-32" id="hero-section">
+  <!-- Background effects remain unchanged -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
     <div class="absolute -top-40 -right-40 w-80 h-80 bg-forlux-orange-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
@@ -14,8 +26,11 @@ import { Image } from 'astro:assets';
     <div class="text-center max-w-4xl mx-auto">
       <div class="relative mb-6 sm:mb-8 inline-block" data-aos="fade-down">
         <div class="absolute inset-0 bg-forlux-orange-gradient blur-xl opacity-30"></div>
-        <span class="relative inline-block px-4 py-2 text-sm sm:text-base font-semibold text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20">
-          International Quality, Indonesian Pride
+        <span 
+          class="relative inline-block px-4 py-2 text-sm sm:text-base font-semibold text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20"
+          id="hero-badge"
+        >
+          Loading...
         </span>
       </div>
 
@@ -24,19 +39,23 @@ import { Image } from 'astro:assets';
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        <span class="bg-clip-text text-transparent bg-forlux-orange-gradient">
-          Revolutionizing
+        <span 
+          class="bg-clip-text text-transparent bg-forlux-orange-gradient"
+          id="hero-title-1"
+        >
+          Loading...
         </span>
         <br class="hidden sm:block" />
-        Traffic Management
+        <span id="hero-title-2">Loading...</span>
       </h1>
 
       <p 
         class="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed"
         data-aos="fade-up"
         data-aos-delay="200"
+        id="hero-description"
       >
-        Experience FORLUX, Indonesia's first AI-powered traffic system. Built with world-class technology and backed by 20 years of expertise in traffic management solutions.
+        Loading...
       </p>
 
       <div 
@@ -46,16 +65,20 @@ import { Image } from 'astro:assets';
       >
         <a href="/products" class="w-full sm:w-auto">
           <div class="gradient-border">
-            <span class="block px-6 sm:px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300">
-              Discover Solutions
+            <span 
+              class="block px-6 sm:px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300"
+              id="hero-cta-primary"
+            >
+              Loading...
             </span>
           </div>
         </a>
         <a 
           href="/contact" 
           class="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-lg font-semibold text-white border border-forlux-orange-primary/20 hover:bg-forlux-orange-primary/5 transition-all duration-300"
+          id="hero-cta-secondary"
         >
-          Schedule Demo
+          Loading...
         </a>
       </div>
 
@@ -64,25 +87,72 @@ import { Image } from 'astro:assets';
         data-aos="fade-up"
         data-aos-delay="400"
       >
-        {[
-          { value: 'TKDN', label: '> 60% Local Content' },
-          { value: 'ISO', label: '27001 Certified' },
-          { value: 'ARM', label: 'Official Partner' },
-          { value: '24/7', label: 'Local Support' },
-        ].map((stat, index) => (
+        {stats.map((stat, index) => (
           <div 
             class="glass-card p-4 sm:p-6 hover:scale-105 transition-transform duration-300"
             data-aos="zoom-in"
             data-aos-delay={500 + (index * 100)}
           >
             <div class="text-xl sm:text-2xl font-bold text-forlux-orange-primary mb-2">{stat.value}</div>
-            <div class="text-xs sm:text-sm text-gray-300">{stat.label}</div>
+            <div 
+              class="text-xs sm:text-sm text-gray-300"
+              id={`stat-${stat.id}-label`}
+            >
+              Loading...
+            </div>
           </div>
         ))}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].hero;
+
+    // Update main content
+    document.getElementById('hero-badge').textContent = t.badge;
+    document.getElementById('hero-title-1').textContent = t.title1;
+    document.getElementById('hero-title-2').textContent = t.title2;
+    document.getElementById('hero-description').textContent = t.description;
+
+    // Update CTAs
+    document.getElementById('hero-cta-primary').textContent = t.cta.primary;
+    document.getElementById('hero-cta-secondary').textContent = t.cta.secondary;
+
+    // Update stats
+    Object.keys(t.stats).forEach(statId => {
+      document.getElementById(`stat-${statId}-label`).textContent = t.stats[statId];
+    });
+  }
+
+  function initHero() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initHero();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>
 
 <style>
   .gradient-border {

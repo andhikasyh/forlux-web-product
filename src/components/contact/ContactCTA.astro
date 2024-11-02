@@ -1,7 +1,12 @@
 ---
+import { currentLanguage } from '../../stores/languageStore';
+import { translations } from '../../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
 ---
 
-<section class="relative py-32 overflow-hidden">
+<section class="relative py-32 overflow-hidden" id="contact-cta">
   {/* Background Effects */}
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
@@ -24,6 +29,7 @@
           <span 
             class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-6"
             data-aos="fade-down"
+            id="ready-text"
           >
             Ready to Get Started?
           </span>
@@ -32,6 +38,7 @@
             class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-forlux-orange-primary to-forlux-green-primary"
             data-aos="fade-up"
             data-aos-delay="100"
+            id="title-text"
           >
             Transform Your City's Infrastructure Today
           </h2>
@@ -40,6 +47,7 @@
             class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="200"
+            id="description-text"
           >
             Join the growing network of smart cities across Indonesia. Our team is ready to help you implement the perfect traffic management solution for your needs.
           </p>
@@ -51,7 +59,7 @@
           >
             <a href="/contact" class="w-full sm:w-auto">
               <div class="gradient-border">
-                <span class="block px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300">
+                <span class="block px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300" id="schedule-demo-text">
                   Schedule Demo
                 </span>
               </div>
@@ -59,6 +67,7 @@
             <a 
               href="tel:+6281234567890" 
               class="w-full sm:w-auto px-8 py-3 rounded-lg font-semibold text-white border border-forlux-orange-primary/20 hover:bg-forlux-orange-primary/5 transition-all duration-300"
+              id="call-us-text"
             >
               Call Us Now
             </a>
@@ -72,15 +81,15 @@
           >
             <div class="flex items-center space-x-2">
               <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">24/7 Support</span>
+              <span class="text-sm text-gray-400" id="support-text">24/7 Support</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">Free Consultation</span>
+              <span class="text-sm text-gray-400" id="consultation-text">Free Consultation</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">Local Expertise</span>
+              <span class="text-sm text-gray-400" id="expertise-text">Local Expertise</span>
             </div>
           </div>
         </div>
@@ -88,6 +97,48 @@
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../../stores/languageStore';
+  import { translations } from '../../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].contactCTA;
+
+    // Update text content
+    document.getElementById('ready-text').textContent = t.ready;
+    document.getElementById('title-text').textContent = t.title;
+    document.getElementById('description-text').textContent = t.description;
+    document.getElementById('schedule-demo-text').textContent = t.buttons.scheduleDemo;
+    document.getElementById('call-us-text').textContent = t.buttons.callUs;
+    document.getElementById('support-text').textContent = t.trustIndicators.support;
+    document.getElementById('consultation-text').textContent = t.trustIndicators.consultation;
+    document.getElementById('expertise-text').textContent = t.trustIndicators.expertise;
+  }
+
+  function initContactCTA() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initContactCTA();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>
 
 <style>
   .gradient-border {

@@ -1,62 +1,90 @@
 ---
-const features = [
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
+const categories = [
   {
-    category: "Core Features",
+    id: "core",
     items: [
-      { name: "Traffic Detection", forlux: true, others: true },
-      { name: "Real-time Monitoring", forlux: true, others: true },
-      { name: "AI-powered Analytics", forlux: true, others: false },
-      { name: "Predictive Control", forlux: true, others: false }
+      { id: "detection", forlux: true, others: true },
+      { id: "monitoring", forlux: true, others: true },
+      { id: "analytics", forlux: true, others: false },
+      { id: "predictive", forlux: true, others: false }
     ]
   },
   {
-    category: "Technical Specs",
+    id: "technical",
     items: [
-      { name: "ARM Cortex M4", forlux: true, others: false },
-      { name: "Hot-swappable Modules", forlux: true, others: false },
-      { name: "Fiber Network Ready", forlux: true, others: true },
-      { name: "Edge Processing", forlux: true, others: false }
+      { id: "processor", forlux: true, others: false },
+      { id: "modules", forlux: true, others: false },
+      { id: "network", forlux: true, others: true },
+      { id: "edge", forlux: true, others: false }
     ]
   },
   {
-    category: "Support & Service",
+    id: "support",
     items: [
-      { name: "24/7 Local Support", forlux: true, others: false },
-      { name: "Remote Diagnostics", forlux: true, others: true },
-      { name: "Predictive Maintenance", forlux: true, others: false },
-      { name: "Custom Integration", forlux: true, others: false }
+      { id: "support247", forlux: true, others: false },
+      { id: "diagnostics", forlux: true, others: true },
+      { id: "maintenance", forlux: true, others: false },
+      { id: "integration", forlux: true, others: false }
     ]
   }
 ];
 ---
 
-<section class="relative py-32">
+<section class="relative py-32" id="product-comparison">
   <div class="container mx-auto px-4">
     <div class="text-center mb-16" data-aos="fade-up">
-      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
+      <span 
+        class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4"
+        id="comparison-label"
+      >
         Why Choose FORLUX
       </span>
-      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
+      <h2 
+        class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient"
+        id="comparison-title"
+      >
         The FORLUX Advantage
       </h2>
-      <p class="text-gray-400 max-w-2xl mx-auto">
+      <p 
+        class="text-gray-400 max-w-2xl mx-auto"
+        id="comparison-description"
+      >
         See how FORLUX sets new standards in traffic management technology
       </p>
     </div>
 
     <div class="glass-card p-8" data-aos="fade-up">
-      {features.map((category) => (
+      {categories.map((category) => (
         <div class="mb-8 last:mb-0">
-          <h3 class="text-xl font-bold mb-4 text-white">
-            {category.category}
+          <h3 
+            class="text-xl font-bold mb-4 text-white"
+            id={`category-${category.id}`}
+          >
+            Loading...
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {category.items.map((item) => (
               <div class="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
-                <span class="text-sm text-gray-400">{item.name}</span>
+                <span 
+                  class="text-sm text-gray-400"
+                  id={`feature-${category.id}-${item.id}`}
+                >
+                  Loading...
+                </span>
                 <div class="flex items-center space-x-8">
                   <div class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-forlux-orange-primary">FORLUX</span>
+                    <span 
+                      class="text-sm font-medium text-forlux-orange-primary"
+                      id="forlux-label"
+                    >
+                      FORLUX
+                    </span>
                     {item.forlux ? (
                       <svg class="w-5 h-5 text-forlux-orange-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -68,7 +96,12 @@ const features = [
                     )}
                   </div>
                   <div class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-gray-500">Others</span>
+                    <span 
+                      class="text-sm font-medium text-gray-500"
+                      id="others-label"
+                    >
+                      Others
+                    </span>
                     {item.others ? (
                       <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -88,3 +121,54 @@ const features = [
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].comparison;
+
+    // Update header content
+    document.getElementById('comparison-label').textContent = t.label;
+    document.getElementById('comparison-title').textContent = t.title;
+    document.getElementById('comparison-description').textContent = t.description;
+
+    // Update labels
+    document.getElementById('forlux-label').textContent = t.labels.forlux;
+    document.getElementById('others-label').textContent = t.labels.others;
+
+    // Update categories and features
+    Object.keys(t.categories).forEach(categoryId => {
+      document.getElementById(`category-${categoryId}`).textContent = t.categories[categoryId].title;
+      
+      // Update features
+      t.categories[categoryId].features.forEach((feature, index) => {
+        document.getElementById(`feature-${categoryId}-${feature.id}`).textContent = feature.name;
+      });
+    });
+  }
+
+  function initProductComparison() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initProductComparison();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

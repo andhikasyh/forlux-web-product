@@ -4,6 +4,8 @@ import { ProcessorAnimation } from './product-animations/ProcessorAnimation';
 import { TrafficLightAnimation } from './product-animations/TrafficLightAnimation';
 import { CameraAnimation } from './product-animations/CameraAnimation';
 import { DashboardAnimation } from './product-animations/DashboardAnimation';
+import { useStore } from '@nanostores/react';
+import { currentLanguage } from '../stores/languageStore';
 
 const animations = {
   processor: ProcessorAnimation,
@@ -12,10 +14,16 @@ const animations = {
   dashboard: DashboardAnimation
 };
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, translations }) {
   const [isHovered, setIsHovered] = useState(false);
   const [activeTab, setActiveTab] = useState('features');
   const AnimationComponent = animations[product.animationType];
+  const $currentLanguage = useStore(currentLanguage);
+  
+  // Find the translated product data
+  const translatedProduct = translations[$currentLanguage].products.find(
+    p => p.id === product.id
+  );
 
   return (
     <motion.div
@@ -39,11 +47,11 @@ export default function ProductCard({ product }) {
         {/* Header */}
         <div className="mb-6">
           <h3 className={`text-2xl font-bold bg-gradient-to-r ${product.gradient} bg-clip-text text-transparent`}>
-            {product.name}
+            {translatedProduct.name}
           </h3>
-          <p className="text-sm text-forlux-orange-primary/80 mt-1">{product.tagline}</p>
+          <p className="text-sm text-forlux-orange-primary/80 mt-1">{translatedProduct.tagline}</p>
           <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-            {product.description}
+            {translatedProduct.description}
           </p>
         </div>
         
@@ -99,7 +107,7 @@ export default function ProductCard({ product }) {
               transition={{ duration: 0.2 }}
               className="grid grid-cols-2 gap-4 mb-6"
             >
-              {product.features.map((feature, index) => (
+              {translatedProduct.features.map((feature, index) => (
                 <motion.div
                   key={index}
                   className="p-3 rounded-lg bg-white/5"
@@ -122,7 +130,7 @@ export default function ProductCard({ product }) {
               transition={{ duration: 0.2 }}
               className="space-y-3 mb-6"
             >
-              {product.specs.map((spec, index) => (
+              {translatedProduct.specs.map((spec, index) => (
                 <motion.div
                   key={index}
                   className="flex items-center text-sm text-gray-400"

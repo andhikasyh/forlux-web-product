@@ -1,40 +1,111 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useStore } from '@nanostores/react';
+import { currentLanguage } from '../../stores/languageStore';
 
 export default function IntegrationDemo() {
+  const $currentLanguage = useStore(currentLanguage);
   const [activeSystem, setActiveSystem] = useState('traffic');
   const [demoData, setDemoData] = useState({ nodes: 0, status: 'initializing' });
 
+  const translations = {
+    en: {
+      sectionTitle: "System Integration",
+      title: "Seamless Integration",
+      description: "Experience how FORLUX components work together in perfect harmony",
+      status: "Status",
+      connectedNodes: "Connected Nodes",
+      operational: "operational",
+      initializing: "initializing",
+      liveData: "Live Data",
+      systems: {
+        traffic: {
+          title: "Traffic Control",
+          description: "Real-time traffic light management and flow optimization",
+          metrics: [
+            { label: "Response Time", value: "< 50ms" },
+            { label: "Accuracy", value: "99.9%" }
+          ]
+        },
+        surveillance: {
+          title: "Video Analytics",
+          description: "AI-powered vehicle detection and incident monitoring",
+          metrics: [
+            { label: "Detection Rate", value: "98.5%" },
+            { label: "False Positives", value: "< 0.1%" }
+          ]
+        },
+        command: {
+          title: "Command Center",
+          description: "Centralized monitoring and control dashboard",
+          metrics: [
+            { label: "Uptime", value: "99.99%" },
+            { label: "Data Points", value: "1M+" }
+          ]
+        }
+      }
+    },
+    id: {
+      sectionTitle: "Integrasi Sistem",
+      title: "Integrasi Sempurna",
+      description: "Rasakan bagaimana komponen FORLUX bekerja bersama dalam harmoni sempurna",
+      status: "Status",
+      connectedNodes: "Node Terhubung",
+      operational: "operasional",
+      initializing: "inisialisasi",
+      liveData: "Data Langsung",
+      systems: {
+        traffic: {
+          title: "Kontrol Lalu Lintas",
+          description: "Manajemen lampu lalu lintas dan optimasi arus secara real-time",
+          metrics: [
+            { label: "Waktu Respons", value: "< 50ms" },
+            { label: "Akurasi", value: "99.9%" }
+          ]
+        },
+        surveillance: {
+          title: "Analisis Video",
+          description: "Deteksi kendaraan dan pemantauan insiden berbasis AI",
+          metrics: [
+            { label: "Tingkat Deteksi", value: "98.5%" },
+            { label: "Positif Palsu", value: "< 0.1%" }
+          ]
+        },
+        command: {
+          title: "Pusat Komando",
+          description: "Dashboard pemantauan dan kontrol terpusat",
+          metrics: [
+            { label: "Waktu Aktif", value: "99.99%" },
+            { label: "Titik Data", value: "1M+" }
+          ]
+        }
+      }
+    }
+  };
+
+  const t = translations[$currentLanguage];
+
   const systems = {
     traffic: {
-      title: "Traffic Control",
-      description: "Real-time traffic light management and flow optimization",
+      title: t.systems.traffic.title,
+      description: t.systems.traffic.description,
       color: "from-forlux-orange-primary to-forlux-orange-secondary",
       gradient: "bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary",
-      metrics: [
-        { label: "Response Time", value: "< 50ms" },
-        { label: "Accuracy", value: "99.9%" }
-      ]
+      metrics: t.systems.traffic.metrics
     },
     surveillance: {
-      title: "Video Analytics",
-      description: "AI-powered vehicle detection and incident monitoring",
+      title: t.systems.surveillance.title,
+      description: t.systems.surveillance.description,
       color: "from-forlux-green-primary to-forlux-green-secondary",
       gradient: "bg-gradient-to-r from-forlux-green-primary to-forlux-green-secondary",
-      metrics: [
-        { label: "Detection Rate", value: "98.5%" },
-        { label: "False Positives", value: "< 0.1%" }
-      ]
+      metrics: t.systems.surveillance.metrics
     },
     command: {
-      title: "Command Center",
-      description: "Centralized monitoring and control dashboard",
+      title: t.systems.command.title,
+      description: t.systems.command.description,
       color: "from-forlux-orange-secondary to-forlux-orange-accent",
       gradient: "bg-gradient-to-r from-forlux-orange-secondary to-forlux-orange-accent",
-      metrics: [
-        { label: "Uptime", value: "99.99%" },
-        { label: "Data Points", value: "1M+" }
-      ]
+      metrics: t.systems.command.metrics
     }
   };
 
@@ -67,13 +138,13 @@ export default function IntegrationDemo() {
           viewport={{ once: true }}
         >
           <span className="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
-            System Integration
+            {t.sectionTitle}
           </span>
           <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
-            Seamless Integration
+            {t.title}
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Experience how FORLUX components work together in perfect harmony
+            {t.description}
           </p>
         </motion.div>
 
@@ -91,11 +162,11 @@ export default function IntegrationDemo() {
                 demoData.status === 'operational' ? 'bg-forlux-green-primary' : 'bg-forlux-orange-primary'
               }`} />
               <span className="text-sm text-gray-400">
-                Status: <span className="text-white font-medium">{demoData.status}</span>
+                {t.status}: <span className="text-white font-medium">{t[demoData.status]}</span>
               </span>
             </motion.div>
             <span className="text-sm text-gray-400">
-              Connected Nodes: <span className="text-white font-medium">{demoData.nodes}</span>
+              {t.connectedNodes}: <span className="text-white font-medium">{demoData.nodes}</span>
             </span>
           </div>
 
@@ -182,7 +253,7 @@ export default function IntegrationDemo() {
                       animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <span className="text-xs text-gray-400">Live Data</span>
+                    <span className="text-xs text-gray-400">{t.liveData}</span>
                   </div>
                 </div>
               </motion.div>

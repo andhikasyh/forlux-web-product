@@ -1,33 +1,31 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
 
 const metrics = [
   {
-    title: "Traffic Flow Optimization",
+    id: "traffic",
     value: "32%",
     trend: "+5%",
-    description: "Reduction in congestion",
     color: "from-forlux-orange-primary to-forlux-orange-secondary"
   },
   {
-    title: "Response Time",
+    id: "response",
     value: "< 50ms",
     trend: "-15ms",
-    description: "Average system latency",
     color: "from-forlux-green-primary to-forlux-green-secondary"
   },
   {
-    title: "Incident Detection",
+    id: "detection",
     value: "98.5%",
     trend: "+2.3%",
-    description: "Detection accuracy",
     color: "from-forlux-orange-secondary to-forlux-orange-accent"
   },
   {
-    title: "Energy Efficiency",
+    id: "energy",
     value: "45%",
     trend: "+12%",
-    description: "Power consumption reduction",
     color: "from-forlux-green-secondary to-forlux-green-accent"
   }
 ];
@@ -117,6 +115,18 @@ function AnimatedGraph() {
 }
 
 export default function Analytics() {
+  const [lang, setLang] = useState(currentLanguage.get());
+
+  useEffect(() => {
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      setLang(newLang);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const t = translations[lang].analytics;
+
   return (
     <section className="py-32 relative">
       <div className="absolute inset-0">
@@ -131,13 +141,13 @@ export default function Analytics() {
           viewport={{ once: true }}
         >
           <span className="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
-            Performance Metrics
+            {t.label}
           </span>
           <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
-            Real-Time System Performance
+            {t.title}
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Monitor key performance indicators across our traffic management network
+            {t.description}
           </p>
         </motion.div>
 
@@ -146,7 +156,7 @@ export default function Analytics() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {metrics.map((metric, index) => (
               <motion.div
-                key={metric.title}
+                key={metric.id}
                 className="relative"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -154,13 +164,11 @@ export default function Analytics() {
                 transition={{ delay: index * 0.1 }}
               >
                 <div className="glass-card p-6 relative group">
-                  {/* Background Gradient */}
                   <div className={`absolute inset-0 bg-gradient-to-r ${metric.color} opacity-0 group-hover:opacity-5 transition-all duration-300 rounded-lg`} />
                   
-                  {/* Content */}
                   <div className="relative z-10">
                     <h3 className="text-sm font-medium text-gray-400 mb-2">
-                      {metric.title}
+                      {t.metrics[metric.id].title}
                     </h3>
                     <div className="flex items-baseline space-x-2 mb-1">
                       <span className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${metric.color}`}>
@@ -173,10 +181,9 @@ export default function Analytics() {
                       </span>
                     </div>
                     <p className="text-xs text-gray-400">
-                      {metric.description}
+                      {t.metrics[metric.id].description}
                     </p>
 
-                    {/* Activity Indicator */}
                     <motion.div
                       className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${metric.color}`}
                       animate={{

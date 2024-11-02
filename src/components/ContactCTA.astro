@@ -1,12 +1,21 @@
 ---
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
 ---
 
-<section class="relative py-32 overflow-hidden">
+<section class="relative py-32 overflow-hidden" id="contact-cta">
   {/* Background Effects */}
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
     <div class="absolute -top-40 -right-40 w-80 h-80 bg-forlux-orange-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
     <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-forlux-green-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+    
+    {/* Additional decorative elements */}
+    <div class="absolute top-20 left-20 w-32 h-32 bg-forlux-green-primary/5 rounded-full animate-pulse"></div>
+    <div class="absolute bottom-20 right-20 w-32 h-32 bg-forlux-orange-primary/5 rounded-full animate-pulse animation-delay-1000"></div>
   </div>
 
   <div class="container relative z-10 px-4 mx-auto">
@@ -20,18 +29,30 @@
           <div class="absolute inset-0 bg-gradient-to-r from-forlux-orange-primary/10 via-forlux-green-primary/10 to-forlux-orange-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         </div>
 
+        {/* Decorative Corner Elements */}
+        <div class="absolute top-0 left-0 w-16 h-16 opacity-10">
+          <div class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-forlux-orange-primary to-transparent"></div>
+          <div class="absolute top-0 left-0 w-0.5 h-full bg-gradient-to-b from-forlux-orange-primary to-transparent"></div>
+        </div>
+        <div class="absolute bottom-0 right-0 w-16 h-16 opacity-10">
+          <div class="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-l from-forlux-green-primary to-transparent"></div>
+          <div class="absolute bottom-0 right-0 w-0.5 h-full bg-gradient-to-t from-forlux-green-primary to-transparent"></div>
+        </div>
+
         <div class="relative">
           <span 
-            class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-6"
+            class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-6 hover:bg-forlux-orange-primary/20 transition-colors duration-300"
             data-aos="fade-down"
+            id="ready-text"
           >
             Ready to Get Started?
           </span>
 
           <h2 
-            class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-forlux-orange-primary to-forlux-green-primary"
+            class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-forlux-orange-primary to-forlux-green-primary hover:scale-105 transition-transform duration-300"
             data-aos="fade-up"
             data-aos-delay="100"
+            id="title-text"
           >
             Transform Your City's Infrastructure Today
           </h2>
@@ -40,6 +61,7 @@
             class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="200"
+            id="description-text"
           >
             Join the growing network of smart cities across Indonesia. Our team is ready to help you implement the perfect traffic management solution for your needs.
           </p>
@@ -49,18 +71,26 @@
             data-aos="fade-up"
             data-aos-delay="300"
           >
-            <a href="/contact" class="w-full sm:w-auto">
+            <a href="/contact" class="w-full sm:w-auto group">
               <div class="gradient-border">
-                <span class="block px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300">
-                  Schedule Demo
-                </span>
+                <div 
+                  class="block px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white group-hover:bg-[#1a1f2d]/80 transition-all duration-300 flex items-center justify-center space-x-2"
+                >
+                  <span id="schedule-demo-text">Schedule Demo</span>
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
               </div>
             </a>
             <a 
               href="tel:+6281234567890" 
-              class="w-full sm:w-auto px-8 py-3 rounded-lg font-semibold text-white border border-forlux-orange-primary/20 hover:bg-forlux-orange-primary/5 transition-all duration-300"
+              class="w-full sm:w-auto px-8 py-3 rounded-lg font-semibold text-white border border-forlux-orange-primary/20 hover:bg-forlux-orange-primary/5 transition-all duration-300 flex items-center justify-center space-x-2 group"
             >
-              Call Us Now
+              <svg class="w-4 h-4 transform group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span id="call-us-text">Call Us Now</span>
             </a>
           </div>
 
@@ -70,17 +100,17 @@
             data-aos="fade-up"
             data-aos-delay="400"
           >
-            <div class="flex items-center space-x-2">
-              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">24/7 Support</span>
+            <div class="flex items-center space-x-2 group">
+              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary group-hover:scale-150 transition-transform"></div>
+              <span class="text-sm text-gray-400 group-hover:text-white transition-colors" id="support-text">24/7 Support</span>
             </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">Free Consultation</span>
+            <div class="flex items-center space-x-2 group">
+              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary group-hover:scale-150 transition-transform"></div>
+              <span class="text-sm text-gray-400 group-hover:text-white transition-colors" id="consultation-text">Free Consultation</span>
             </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary"></div>
-              <span class="text-sm text-gray-400">Local Expertise</span>
+            <div class="flex items-center space-x-2 group">
+              <div class="w-1.5 h-1.5 rounded-full bg-forlux-green-primary group-hover:scale-150 transition-transform"></div>
+              <span class="text-sm text-gray-400 group-hover:text-white transition-colors" id="expertise-text">Local Expertise</span>
             </div>
           </div>
         </div>
@@ -107,7 +137,69 @@
     animation: blob 10s infinite;
   }
 
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
   .animation-delay-2000 {
     animation-delay: 2s;
   }
+
+  .animate-pulse {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.3; }
+  }
 </style>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+  
+  function updateContent(lang: string) {
+    // Check if we're on a page with the contact CTA
+    const contactCTA = document.getElementById('contact-cta');
+    if (!contactCTA) return; // Exit if the contact CTA isn't present
+
+    const t = translations[lang].contactCTA;
+    
+    // Helper function to safely update elements
+    const updateElement = (id: string, text: string) => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = text;
+    };
+
+    // Update text content
+    updateElement('ready-text', t.ready);
+    updateElement('title-text', t.title);
+    updateElement('description-text', t.description);
+    updateElement('schedule-demo-text', t.buttons.scheduleDemo);
+    updateElement('call-us-text', t.buttons.callUs);
+    updateElement('support-text', t.trustIndicators.support);
+    updateElement('consultation-text', t.trustIndicators.consultation);
+    updateElement('expertise-text', t.trustIndicators.expertise);
+  }
+
+  function initContactCTA() {
+    // Only initialize if the component is present
+    if (!document.getElementById('contact-cta')) return;
+    
+    updateContent(currentLanguage.get());
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+    return unsubscribe;
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initContactCTA();
+    if (unsubscribe) { // Only add cleanup if we initialized
+      document.addEventListener('astro:before-preparation', () => {
+        unsubscribe();
+      }, { once: true });
+    }
+  });
+</script>

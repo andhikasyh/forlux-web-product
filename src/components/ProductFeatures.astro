@@ -1,60 +1,142 @@
 ---
-const features = [
-  {
-    icon: "🔬",
-    title: "ARM Cortex M4 Technology",
-    description: "High-performance industrial-grade processor designed for demanding traffic control applications.",
-    details: [
-      "T7 series high-temperature certified",
-      "Industrial-grade reliability",
-      "Advanced real-time processing",
-      "Optimized power efficiency"
-    ]
-  },
-  {
-    icon: "🔄",
-    title: "Hot-Swappable Design",
-    description: "Revolutionary modular architecture enabling maintenance without system downtime.",
-    details: [
-      "Zero downtime maintenance",
-      "Quick component replacement",
-      "Plug-and-play modules",
-      "Future-proof expandability"
-    ]
-  },
-  {
-    icon: "🌐",
-    title: "Fiber Network Integration",
-    description: "High-speed fiber optic network for reliable, real-time traffic management.",
-    details: [
-      "Ultra-low latency",
-      "Secure data transmission",
-      "Remote system updates",
-      "Redundant connectivity"
-    ]
-  }
-];
+import { currentLanguage } from '../stores/languageStore';
 
-const certifications = [
-  {
-    icon: "🏆",
-    title: "TKDN Certified",
-    value: "> 60%",
-    description: "High local content certification, supporting Indonesian industry"
+// Get initial language for SSR
+const initialLang = currentLanguage.get();
+
+// Translation data
+const translations = {
+  en: {
+    title: "Engineered for Excellence",
+    subtitle: "Advanced Technology",
+    description: "Discover the cutting-edge technologies that make FORLUX the most advanced traffic management system in Indonesia",
+    certTitle: {
+      title: "Certified Excellence",
+      description: "Meeting international standards while prioritizing Indonesian manufacturing"
+    },
+    features: [
+      {
+        icon: "🔬",
+        title: "ARM Cortex M4 Technology",
+        description: "High-performance industrial-grade processor designed for demanding traffic control applications.",
+        details: [
+          "T7 series high-temperature certified",
+          "Industrial-grade reliability",
+          "Advanced real-time processing",
+          "Optimized power efficiency"
+        ]
+      },
+      {
+        icon: "🔄",
+        title: "Hot-Swappable Design",
+        description: "Revolutionary modular architecture enabling maintenance without system downtime.",
+        details: [
+          "Zero downtime maintenance",
+          "Quick component replacement",
+          "Plug-and-play modules",
+          "Future-proof expandability"
+        ]
+      },
+      {
+        icon: "🌐",
+        title: "Fiber Network Integration",
+        description: "High-speed fiber optic network for reliable, real-time traffic management.",
+        details: [
+          "Ultra-low latency",
+          "Secure data transmission",
+          "Remote system updates",
+          "Redundant connectivity"
+        ]
+      }
+    ],
+    certs: [
+      {
+        icon: "🏆",
+        title: "TKDN Certified",
+        value: "> 60%",
+        description: "High local content certification, supporting Indonesian industry"
+      },
+      {
+        icon: "🔒",
+        title: "ISO 27001",
+        value: "Certified",
+        description: "International security management standard"
+      },
+      {
+        icon: "⚡",
+        title: "IEC 61508",
+        value: "SIL 2",
+        description: "Functional safety for electronic systems"
+      }
+    ]
   },
-  {
-    icon: "🔒",
-    title: "ISO 27001",
-    value: "Certified",
-    description: "International security management standard"
-  },
-  {
-    icon: "⚡",
-    title: "IEC 61508",
-    value: "SIL 2",
-    description: "Functional safety for electronic systems"
+  id: {
+    title: "Direkayasa untuk Keunggulan",
+    subtitle: "Teknologi Canggih",
+    description: "Temukan teknologi mutakhir yang menjadikan FORLUX sistem manajemen lalu lintas paling canggih di Indonesia",
+    certTitle: {
+      title: "Keunggulan Tersertifikasi",
+      description: "Memenuhi standar internasional sambil memprioritaskan manufaktur Indonesia"
+    },
+    features: [
+      {
+        icon: "🔬",
+        title: "Teknologi ARM Cortex M4",
+        description: "Prosesor kelas industri berkinerja tinggi yang dirancang untuk aplikasi kontrol lalu lintas yang menuntut.",
+        details: [
+          "Sertifikasi suhu tinggi seri T7",
+          "Keandalan kelas industri",
+          "Pemrosesan real-time canggih",
+          "Efisiensi daya optimal"
+        ]
+      },
+      {
+        icon: "🔄",
+        title: "Desain Hot-Swappable",
+        description: "Arsitektur modular revolusioner yang memungkinkan pemeliharaan tanpa downtime sistem.",
+        details: [
+          "Pemeliharaan tanpa downtime",
+          "Penggantian komponen cepat",
+          "Modul plug-and-play",
+          "Kemampuan ekspansi masa depan"
+        ]
+      },
+      {
+        icon: "🌐",
+        title: "Integrasi Jaringan Fiber",
+        description: "Jaringan fiber optik berkecepatan tinggi untuk manajemen lalu lintas yang andal dan real-time.",
+        details: [
+          "Latensi ultra-rendah",
+          "Transmisi data aman",
+          "Pembaruan sistem jarak jauh",
+          "Konektivitas redundan"
+        ]
+      }
+    ],
+    certs: [
+      {
+        icon: "🏆",
+        title: "Tersertifikasi TKDN",
+        value: "> 60%",
+        description: "Sertifikasi konten lokal tinggi, mendukung industri Indonesia"
+      },
+      {
+        icon: "🔒",
+        title: "ISO 27001",
+        value: "Tersertifikasi",
+        description: "Standar manajemen keamanan internasional"
+      },
+      {
+        icon: "⚡",
+        title: "IEC 61508",
+        value: "SIL 2",
+        description: "Keamanan fungsional untuk sistem elektronik"
+      }
+    ]
   }
-];
+};
+
+const content = translations[initialLang];
 ---
 
 <section class="relative py-32">
@@ -64,30 +146,30 @@ const certifications = [
   
   <div class="container mx-auto px-4 relative z-10">
     <div class="text-center mb-16" data-aos="fade-up">
-      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4">
-        Advanced Technology
+      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4" id="features-subtitle">
+        {content.subtitle}
       </span>
-      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient">
-        Engineered for Excellence
+      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient" id="features-title">
+        {content.title}
       </h2>
-      <p class="text-gray-400 max-w-2xl mx-auto">
-        Discover the cutting-edge technologies that make FORLUX the most advanced traffic management system in Indonesia
+      <p class="text-gray-400 max-w-2xl mx-auto" id="features-description">
+        {content.description}
       </p>
     </div>
 
     <!-- Core Features -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-      {features.map((feature, index) => (
+      {content.features.map((feature, index) => (
         <div 
           class="glass-card p-6"
           data-aos="fade-up"
           data-aos-delay={index * 100}
         >
           <span class="text-3xl mb-4 block">{feature.icon}</span>
-          <h3 class="text-xl font-bold mb-2 text-forlux-green-primary">
+          <h3 class="text-xl font-bold mb-2 text-forlux-green-primary" id={`feature-${index}-title`}>
             {feature.title}
           </h3>
-          <p class="text-gray-400 mb-4 text-sm">
+          <p class="text-gray-400 mb-4 text-sm" id={`feature-${index}-description`}>
             {feature.description}
           </p>
           <ul class="space-y-2">
@@ -96,6 +178,7 @@ const certifications = [
                 class="flex items-center text-sm text-gray-400"
                 data-aos="fade-left"
                 data-aos-delay={300 + (detailIndex * 100)}
+                id={`feature-${index}-detail-${detailIndex}`}
               >
                 <span class="w-1.5 h-1.5 bg-forlux-green-primary rounded-full mr-2"></span>
                 {detail}
@@ -109,30 +192,77 @@ const certifications = [
     <!-- Certifications -->
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12" data-aos="fade-up">
-        <h3 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
-          Certified Excellence
+        <h3 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient" id="certifications-title">
+          {content.certTitle.title}
         </h3>
-        <p class="text-gray-400">
-          Meeting international standards while prioritizing Indonesian manufacturing
+        <p class="text-gray-400" id="certifications-description">
+          {content.certTitle.description}
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {certifications.map((cert, index) => (
+        {content.certs.map((cert, index) => (
           <div 
             class="glass-card p-6 text-center"
             data-aos="zoom-in"
             data-aos-delay={index * 100}
           >
             <span class="text-3xl mb-4 block">{cert.icon}</span>
-            <div class="text-2xl font-bold text-forlux-orange-primary mb-2">
+            <div class="text-2xl font-bold text-forlux-orange-primary mb-2" id={`cert-${index}-value`}>
               {cert.value}
             </div>
-            <h4 class="text-sm font-semibold text-white mb-2">{cert.title}</h4>
-            <p class="text-xs text-gray-400">{cert.description}</p>
+            <h4 class="text-sm font-semibold text-white mb-2" id={`cert-${index}-title`}>{cert.title}</h4>
+            <p class="text-xs text-gray-400" id={`cert-${index}-description`}>{cert.description}</p>
           </div>
         ))}
       </div>
     </div>
   </div>
 </section>
+
+<script define:vars={{ translations }}>
+  import { currentLanguage } from '../stores/languageStore';
+
+  function updateContent(lang) {
+    const content = translations[lang];
+
+    // Update main content
+    document.getElementById('features-subtitle').textContent = content.subtitle;
+    document.getElementById('features-title').textContent = content.title;
+    document.getElementById('features-description').textContent = content.description;
+
+    // Update features
+    content.features.forEach((feature, index) => {
+      document.getElementById(`feature-${index}-title`).textContent = feature.title;
+      document.getElementById(`feature-${index}-description`).textContent = feature.description;
+      feature.details.forEach((detail, detailIndex) => {
+        document.getElementById(`feature-${index}-detail-${detailIndex}`).textContent = detail;
+      });
+    });
+
+    // Update certifications
+    document.getElementById('certifications-title').textContent = content.certTitle.title;
+    document.getElementById('certifications-description').textContent = content.certTitle.description;
+
+    content.certs.forEach((cert, index) => {
+      document.getElementById(`cert-${index}-value`).textContent = cert.value;
+      document.getElementById(`cert-${index}-title`).textContent = cert.title;
+      document.getElementById(`cert-${index}-description`).textContent = cert.description;
+    });
+  }
+
+  function initFeatures() {
+    updateContent(currentLanguage.get());
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+    return unsubscribe;
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initFeatures();
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

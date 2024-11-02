@@ -1,142 +1,201 @@
 ---
+import { currentLanguage } from '../../stores/languageStore';
+import { translations } from '../../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
 const architectureComponents = [
   {
-    title: "Edge Devices",
-    description: "Distributed processing units powered by ARM Cortex M4",
-    items: [
-      "Traffic controllers",
-      "Smart cameras",
-      "Environmental sensors",
-      "Vehicle detectors"
-    ],
-    gradient: "from-forlux-orange-primary to-forlux-orange-secondary"
+    id: "edge",
+    gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
+    itemCount: 4
   },
   {
-    title: "Network Layer",
-    description: "High-speed fiber optic communication infrastructure",
-    items: [
-      "Redundant connections",
-      "Secure protocols",
-      "Real-time data transfer",
-      "Fault tolerance"
-    ],
-    gradient: "from-forlux-green-primary to-forlux-green-secondary"
+    id: "network",
+    gradient: "from-forlux-green-primary to-forlux-green-secondary",
+    itemCount: 4
   },
   {
-    title: "Control Center",
-    description: "Centralized management and monitoring system",
-    items: [
-      "AI analytics engine",
-      "GIS integration",
-      "Command dashboard",
-      "Data visualization"
-    ],
-    gradient: "from-forlux-orange-secondary to-forlux-orange-accent"
+    id: "control",
+    gradient: "from-forlux-orange-secondary to-forlux-orange-accent",
+    itemCount: 4
   }
 ];
 ---
 
-<section class="relative py-32 bg-slate-900/50">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
-      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4">
-        System Architecture
-      </span>
-      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient">
-        Engineered for Scale
-      </h2>
-      <p class="text-gray-400 max-w-2xl mx-auto">
-        A robust and scalable architecture designed for growing cities
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-      {architectureComponents.map((component, index) => (
+<section class="relative py-32" id="system-architecture">
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- Left Content -->
+      <div class="space-y-16">
+        <!-- Header Section -->
         <div 
-          class="glass-card p-6 relative group h-full"
+          data-aos="fade-up" 
+          data-aos-duration="1000"
+          class="relative"
+        >
+          <span 
+            class="text-forlux-green-primary text-lg font-medium mb-4 block hover:-translate-y-1 transition-transform duration-300"
+            id="architecture-label"
+          >
+            {translations[initialLang].features.architecture.label}
+          </span>
+          
+          <h2 
+            class="text-5xl font-bold mb-6 text-white relative z-10"
+            id="architecture-title"
+          >
+            {translations[initialLang].features.architecture.title}
+          </h2>
+          <!-- Decorative gradient blur -->
+          <div class="absolute -left-10 -top-10 w-72 h-72 bg-forlux-green-primary/20 rounded-full blur-3xl -z-10"></div>
+        </div>
+
+        <!-- Features List -->
+        <div class="space-y-12">
+          {architectureComponents.map((component, index) => (
+            <div 
+              class="group p-6 rounded-2xl hover:bg-white/5 transition-all duration-500"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay={index * 200}
+            >
+              <div class="space-y-4">
+                <h3 
+                  class={`text-2xl font-bold bg-gradient-to-r ${component.gradient} 
+                         bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300`}
+                  id={`title-${component.id}`}
+                >
+                  {translations[initialLang].features.architecture[component.id].title}
+                </h3>
+                
+                <p 
+                  class="text-slate-400 text-base leading-relaxed max-w-lg group-hover:text-slate-300 transition-colors duration-300"
+                  id={`description-${component.id}`}
+                >
+                  {translations[initialLang].features.architecture[component.id].description}
+                </p>
+
+                <!-- Items Grid -->
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                  {translations[initialLang].features.architecture[component.id].items.map((item, itemIndex) => (
+                    <div 
+                      class="flex items-center space-x-2"
+                      id={`item-${component.id}-${itemIndex}`}
+                    >
+                      <span class={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${component.gradient}`}></span>
+                      <span class="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p 
+          class="text-slate-400 text-base max-w-lg hover:text-slate-300 transition-colors duration-300"
+          id="architecture-description"
           data-aos="fade-up"
           data-aos-duration="1000"
-          data-aos-delay={index * 300}
+          data-aos-delay="600"
         >
-          <div class={`absolute inset-0 bg-gradient-to-r ${component.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-xl`}></div>
+          {translations[initialLang].features.architecture.description}
+        </p>
+      </div>
+
+      <!-- Right Image -->
+      <div class="relative" data-aos="zoom-in" data-aos-duration="1500">
+        <div class="relative w-[540px] h-[540px] mx-auto transform hover:scale-105 transition-transform duration-700">
+          <!-- Background Glow -->
+          <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 via-transparent to-transparent opacity-50 blur-3xl -z-10 animate-pulse-slow"></div>
           
-          <h3 
-            class={`text-xl font-bold mb-4 bg-gradient-to-r ${component.gradient} bg-clip-text text-transparent`}
-            data-aos="fade-down"
-            data-aos-duration="800"
-            data-aos-delay={index * 300 + 200}
-          >
-            {component.title}
-          </h3>
-          
-          <p 
-            class="text-gray-400 text-sm mb-6"
-            data-aos="fade-up"
-            data-aos-duration="800"
-            data-aos-delay={index * 300 + 400}
-          >
-            {component.description}
-          </p>
-
-          <ul class="space-y-3">
-            {component.items.map((item, itemIndex) => (
-              <li 
-                class="flex items-center text-sm text-gray-400"
-                data-aos="fade-left"
-                data-aos-duration="600"
-                data-aos-delay={index * 300 + 600 + (itemIndex * 150)}
-              >
-                <span class={`w-1.5 h-1.5 rounded-full mr-2 bg-gradient-to-r ${component.gradient}`}></span>
-                {item}
-              </li>
-            ))}
-          </ul>
-
-          {index < 2 && (
-            <>
-              <div 
-                class="hidden md:block absolute top-1/2 z-10"
-                style="right: -2rem; width: 4rem;"
-                data-aos="fade-left"
-                data-aos-duration="800"
-                data-aos-delay={index * 300 + 1000}
-              >
-                <div class="absolute top-1/2 -translate-y-1/2 w-full h-[2px]">
-                  <div class={`w-full h-full bg-gradient-to-r 
-                    ${index === 0 
-                      ? "from-forlux-orange-secondary via-forlux-green-primary to-transparent"
-                      : "from-forlux-green-secondary via-forlux-orange-secondary to-transparent"
-                    }`}
-                  ></div>
-                </div>
-
-                <div class={`absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full
-                  ${index === 0 
-                    ? "bg-forlux-orange-secondary"
-                    : "bg-forlux-green-secondary"
-                  }`}
-                ></div>
-
-                <div class={`absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full
-                  ${index === 0 
-                    ? "bg-forlux-green-primary"
-                    : "bg-forlux-orange-secondary"
-                  }`}
-                ></div>
-              </div>
-            </>
-          )}
+          <!-- Image Container -->
+          <div class="relative w-full h-full rounded-[2.5rem] overflow-hidden bg-slate-900/30 hover:bg-slate-900/40 transition-colors duration-300">
+            <img 
+              src="/structure-scale.jpg" 
+              alt="System Architecture Visualization" 
+              class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+            />
+            <!-- Overlay gradient animation -->
+            <div class="absolute inset-0 bg-gradient-to-br from-forlux-orange-primary/10 to-forlux-green-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .glass-card {
-    backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
   }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Remove unused animations from previous version */
 </style>
+
+<script>
+  import { currentLanguage } from '../../stores/languageStore';
+  import { translations } from '../../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].features.architecture;
+
+    // Update header content
+    document.getElementById('architecture-label').textContent = t.label;
+    document.getElementById('architecture-title').textContent = t.title;
+    document.getElementById('architecture-description').textContent = t.description;
+
+    // Update edge devices content
+    document.getElementById('title-edge').textContent = t.edge.title;
+    document.getElementById('description-edge').textContent = t.edge.description;
+    t.edge.items.forEach((item, index) => {
+      document.getElementById(`item-edge-${index}`).textContent = item;
+    });
+
+    // Update network layer content
+    document.getElementById('title-network').textContent = t.network.title;
+    document.getElementById('description-network').textContent = t.network.description;
+    t.network.items.forEach((item, index) => {
+      document.getElementById(`item-network-${index}`).textContent = item;
+    });
+
+    // Update control center content
+    document.getElementById('title-control').textContent = t.control.title;
+    document.getElementById('description-control').textContent = t.control.description;
+    t.control.items.forEach((item, index) => {
+      document.getElementById(`item-control-${index}`).textContent = item;
+    });
+  }
+
+  function initSystemArchitecture() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initSystemArchitecture();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

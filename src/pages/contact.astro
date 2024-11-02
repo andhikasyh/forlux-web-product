@@ -1,22 +1,36 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { currentLanguage } from '../stores/languageStore';
+import { translations } from '../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
 ---
 
 <Layout title="Contact Us">
-  <div class="relative">
+  <div class="relative" id="contact-page">
     <section class="relative py-32 overflow-hidden">
       <div class="absolute inset-0">
         <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/10 to-transparent opacity-30 blur-3xl"></div>
       </div>
       <div class="container mx-auto px-4">
         <div class="max-w-3xl mx-auto text-center mb-16" data-aos="fade-up">
-          <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
+          <span 
+            class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4"
+            id="lets-connect"
+          >
             Let's Connect
           </span>
-          <h1 class="text-4xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary">
+          <h1 
+            class="text-5xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary"
+            id="get-in-touch"
+          >
             Get in Touch
           </h1>
-          <p class="text-xl text-gray-300">
+          <p 
+            class="text-xl text-gray-300"
+            id="discuss-text"
+          >
             Let's discuss how we can transform your city's infrastructure
           </p>
         </div>
@@ -25,7 +39,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="glass-card p-8" data-aos="fade-right">
             <form class="space-y-6">
               <div>
-                <label for="name" class="block text-sm font-medium text-gray-300">Name</label>
+                <label for="name" class="block text-sm font-medium text-gray-300" id="label-name">Name</label>
                 <input
                   type="text"
                   id="name"
@@ -35,7 +49,7 @@ import Layout from '../layouts/Layout.astro';
                 />
               </div>
               <div>
-                <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                <label for="email" class="block text-sm font-medium text-gray-300" id="label-email">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -45,7 +59,7 @@ import Layout from '../layouts/Layout.astro';
                 />
               </div>
               <div>
-                <label for="message" class="block text-sm font-medium text-gray-300">Message</label>
+                <label for="message" class="block text-sm font-medium text-gray-300" id="label-message">Message</label>
                 <textarea
                   id="message"
                   name="message"
@@ -57,6 +71,7 @@ import Layout from '../layouts/Layout.astro';
               <button
                 type="submit"
                 class="w-full bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary text-white py-3 px-4 rounded-lg hover:opacity-90 transition-opacity duration-300 font-medium"
+                id="send-button"
               >
                 Send Message
               </button>
@@ -64,16 +79,16 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <div class="glass-card p-8" data-aos="fade-left">
-            <h3 class="text-xl font-bold text-white mb-6">Contact Information</h3>
+            <h3 class="text-xl font-bold text-white mb-6" id="contact-info-title">Contact Information</h3>
             <div class="space-y-6">
               <div>
-                <h4 class="text-sm font-medium text-gray-400 mb-2">Address</h4>
-                <p class="text-gray-300">Jl. Sudirman No. 123</p>
-                <p class="text-gray-300">Jakarta Selatan, 12190</p>
-                <p class="text-gray-300">Indonesia</p>
+                <h4 class="text-sm font-medium text-gray-400 mb-2" id="address-title">Address</h4>
+                <p class="text-gray-300" id="address-line1">Kawasan Industri Cikupamas 2</p>
+                <p class="text-gray-300" id="address-line2">Jl. Bhumimas VI/1, Cikupa</p>
+                <p class="text-gray-300" id="address-line3">Tangerang, Banten 15710</p>
               </div>
               <div>
-                <h4 class="text-sm font-medium text-gray-400 mb-2">Email</h4>
+                <h4 class="text-sm font-medium text-gray-400 mb-2" id="email-title">Email</h4>
                 <a 
                   href="mailto:contact@forlux.id" 
                   class="text-gray-300 hover:text-forlux-orange-primary transition-colors duration-300"
@@ -82,23 +97,23 @@ import Layout from '../layouts/Layout.astro';
                 </a>
               </div>
               <div>
-                <h4 class="text-sm font-medium text-gray-400 mb-2">Phone</h4>
+                <h4 class="text-sm font-medium text-gray-400 mb-2" id="phone-title">Phone</h4>
                 <a 
                   href="tel:+6281234567890" 
                   class="text-gray-300 hover:text-forlux-orange-primary transition-colors duration-300"
                 >
-                  +62 812-3456-7890
+                  +62-822-1010-7918
                 </a>
               </div>
               <div>
-                <h4 class="text-sm font-medium text-gray-400 mb-2">Business Hours</h4>
-                <p class="text-gray-300">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                <p class="text-gray-300">Saturday: 9:00 AM - 1:00 PM</p>
+                <h4 class="text-sm font-medium text-gray-400 mb-2" id="hours-title">Business Hours</h4>
+                <p class="text-gray-300" id="hours-weekday">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p class="text-gray-300" id="hours-weekend">Saturday: 9:00 AM - 1:00 PM</p>
               </div>
             </div>
 
             <div class="mt-8 pt-8 border-t border-slate-800">
-              <h4 class="text-sm font-medium text-gray-400 mb-4">Connect With Us</h4>
+              <h4 class="text-sm font-medium text-gray-400 mb-4" id="social-title">Connect With Us</h4>
               <div class="flex space-x-4">
                 <a 
                   href="#" 
@@ -135,3 +150,59 @@ import Layout from '../layouts/Layout.astro';
     </section>
   </div>
 </Layout>
+
+<script>
+  import { currentLanguage } from '../stores/languageStore';
+  import { translations } from '../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].contact;
+
+    // Update header content
+    document.getElementById('lets-connect').textContent = t.letsConnect;
+    document.getElementById('get-in-touch').textContent = t.getInTouch;
+    document.getElementById('discuss-text').textContent = t.discuss;
+
+    // Update form labels
+    document.getElementById('label-name').textContent = t.form.name;
+    document.getElementById('label-email').textContent = t.form.email;
+    document.getElementById('label-message').textContent = t.form.message;
+    document.getElementById('send-button').textContent = t.form.send;
+
+    // Update contact information
+    document.getElementById('contact-info-title').textContent = t.info.title;
+    document.getElementById('address-title').textContent = t.info.address.title;
+    document.getElementById('address-line1').textContent = t.info.address.line1;
+    document.getElementById('address-line2').textContent = t.info.address.line2;
+    document.getElementById('address-line3').textContent = t.info.address.line3;
+    document.getElementById('email-title').textContent = t.info.email;
+    document.getElementById('phone-title').textContent = t.info.phone;
+    document.getElementById('hours-title').textContent = t.info.hours.title;
+    document.getElementById('hours-weekday').textContent = t.info.hours.weekday;
+    document.getElementById('hours-weekend').textContent = t.info.hours.weekend;
+    document.getElementById('social-title').textContent = t.info.social;
+  }
+
+  function initContactPage() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initContactPage();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

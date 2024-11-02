@@ -1,46 +1,48 @@
 ---
+import { currentLanguage } from '../../stores/languageStore';
+import { translations } from '../../utils/translations';
 import ModularAnimation from './animations/ModularAnimation';
 import DetectionAnimation from './animations/DetectionAnimation';
 import CommandAnimation from './animations/CommandAnimation';
 
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
+
 const features = [
   {
-    title: "Modular Traffic Control",
-    description: "Revolutionary hot-swappable design with redundant systems ensures zero downtime during maintenance or upgrades.",
+    id: "modular",
     icon: "🔄",
     gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
     stats: [
-      { value: "0", label: "Downtime" },
-      { value: "< 30s", label: "Module Swap" }
+      { id: "downtime", value: "0" },
+      { id: "swap", value: "< 30s" }
     ],
     animation: "modular"
   },
   {
-    title: "AI-Powered Incident Detection",
-    description: "Advanced computer vision algorithms detect and respond to traffic incidents in real-time.",
+    id: "detection",
     icon: "👁️",
     gradient: "from-forlux-green-primary to-forlux-green-secondary",
     stats: [
-      { value: "98%", label: "Detection Rate" },
-      { value: "< 3s", label: "Response Time" }
+      { id: "detection", value: "98%" },
+      { id: "response", value: "< 3s" }
     ],
     animation: "detection"
   },
   {
-    title: "Integrated Command Center",
-    description: "GIS-based monitoring system providing comprehensive city-wide traffic management.",
+    id: "command",
     icon: "🌍",
     gradient: "from-forlux-orange-secondary to-forlux-orange-accent",
     stats: [
-      { value: "100%", label: "Coverage" },
-      { value: "Real-time", label: "Updates" }
+      { id: "coverage", value: "100%" },
+      { id: "updates", value: "Real-time" }
     ],
     animation: "command"
   }
 ];
 ---
 
-<section class="relative py-32">
+<section class="relative py-32" id="feature-showcase">
   <div class="container mx-auto px-4">
     {features.map((feature, index) => (
       <div 
@@ -53,13 +55,19 @@ const features = [
             <div class="space-y-6">
               <div class="flex items-center space-x-4">
                 <span class="text-4xl">{feature.icon}</span>
-                <h3 class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
-                  {feature.title}
+                <h3 
+                  class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}
+                  id={`title-${feature.id}`}
+                >
+                  Loading...
                 </h3>
               </div>
               
-              <p class="text-gray-400 leading-relaxed">
-                {feature.description}
+              <p 
+                class="text-gray-400 leading-relaxed"
+                id={`description-${feature.id}`}
+              >
+                Loading...
               </p>
 
               <div class="flex space-x-8">
@@ -68,8 +76,11 @@ const features = [
                     <div class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
                       {stat.value}
                     </div>
-                    <div class="text-sm text-gray-400">
-                      {stat.label}
+                    <div 
+                      class="text-sm text-gray-400"
+                      id={`stat-${feature.id}-${stat.id}`}
+                    >
+                      Loading...
                     </div>
                   </div>
                 ))}
@@ -93,3 +104,53 @@ const features = [
     ))}
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../../stores/languageStore';
+  import { translations } from '../../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].features.showcase;
+
+    // Update modular feature
+    document.getElementById('title-modular').textContent = t.modular.title;
+    document.getElementById('description-modular').textContent = t.modular.description;
+    document.getElementById('stat-modular-downtime').textContent = t.modular.stats.downtime;
+    document.getElementById('stat-modular-swap').textContent = t.modular.stats.swap;
+
+    // Update detection feature
+    document.getElementById('title-detection').textContent = t.detection.title;
+    document.getElementById('description-detection').textContent = t.detection.description;
+    document.getElementById('stat-detection-detection').textContent = t.detection.stats.detection;
+    document.getElementById('stat-detection-response').textContent = t.detection.stats.response;
+
+    // Update command feature
+    document.getElementById('title-command').textContent = t.command.title;
+    document.getElementById('description-command').textContent = t.command.description;
+    document.getElementById('stat-command-coverage').textContent = t.command.stats.coverage;
+    document.getElementById('stat-command-updates').textContent = t.command.stats.updates;
+  }
+
+  function initFeatureShowcase() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initFeatureShowcase();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>

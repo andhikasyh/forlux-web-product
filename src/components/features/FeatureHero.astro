@@ -1,7 +1,12 @@
 ---
+import { currentLanguage } from '../../stores/languageStore';
+import { translations } from '../../utils/translations';
+
+// Initial language value for SSR
+const initialLang = currentLanguage.get();
 ---
 
-<section class="relative min-h-[40vh] flex items-center justify-center py-32 overflow-hidden">
+<section class="relative min-h-[40vh] flex items-center justify-center py-32 overflow-hidden" id="feature-hero">
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
   </div>
@@ -9,7 +14,10 @@
   <div class="container relative z-10 px-4 mx-auto">
     <div class="text-center max-w-4xl mx-auto">
       <div class="mb-6" data-aos="fade-down">
-        <span class="inline-block px-4 py-2 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20">
+        <span 
+          class="inline-block px-4 py-2 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20"
+          id="capabilities-text"
+        >
           Advanced Capabilities
         </span>
       </div>
@@ -19,20 +27,62 @@
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        <span class="bg-clip-text text-transparent bg-forlux-orange-gradient">
+        <span 
+          class="bg-clip-text text-transparent bg-forlux-orange-gradient"
+          id="next-gen-text"
+        >
           Next-Generation
         </span>
         <br />
-        Traffic Management
+        <span id="traffic-management-text">Traffic Management</span>
       </h1>
 
       <p 
         class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
         data-aos="fade-up"
         data-aos-delay="200"
+        id="description-text"
       >
         Discover how FORLUX's cutting-edge features revolutionize urban traffic control with Indonesian innovation and world-class technology.
       </p>
     </div>
   </div>
 </section>
+
+<script>
+  import { currentLanguage } from '../../stores/languageStore';
+  import { translations } from '../../utils/translations';
+
+  function updateContent(lang) {
+    const t = translations[lang].features.hero;
+
+    // Update text content
+    document.getElementById('capabilities-text').textContent = t.capabilities;
+    document.getElementById('next-gen-text').textContent = t.nextGen;
+    document.getElementById('traffic-management-text').textContent = t.trafficManagement;
+    document.getElementById('description-text').textContent = t.description;
+  }
+
+  function initFeatureHero() {
+    // Initial render
+    updateContent(currentLanguage.get());
+
+    // Listen for language changes
+    const unsubscribe = currentLanguage.subscribe(newLang => {
+      updateContent(newLang);
+    });
+
+    // Cleanup subscription when component is destroyed
+    return unsubscribe;
+  }
+
+  // Handle initial load and page transitions
+  document.addEventListener('astro:page-load', () => {
+    const unsubscribe = initFeatureHero();
+    
+    // Cleanup on page transition
+    document.addEventListener('astro:before-preparation', () => {
+      unsubscribe();
+    }, { once: true });
+  });
+</script>
