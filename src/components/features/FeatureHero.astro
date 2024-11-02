@@ -63,29 +63,54 @@ const initialLang = currentLanguage.get();
 </section>
 
 <style>
+  /* Mobile-optimized styles */
   .traffic-grid {
-    background-image: linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px),
-                      linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px);
-    background-size: 50px 50px;
+    background-image: linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+                      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 25px 25px;
+  }
+
+  @media (min-width: 768px) {
+    .traffic-grid {
+      background-size: 50px 50px;
+      background-image: linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px),
+                        linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px);
+    }
   }
 
   .data-point {
-    @apply absolute w-2 h-2 rounded-full bg-forlux-orange-primary/60;
-    filter: blur(1px);
+    @apply absolute w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-forlux-orange-primary/40 md:bg-forlux-orange-primary/60;
+    filter: blur(0.5px);
+  }
+
+  @media (min-width: 768px) {
+    .data-point {
+      filter: blur(1px);
+    }
   }
 
   .connection-path {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.2);
-    stroke-width: 1;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 0.5;
+  }
+
+  @media (min-width: 768px) {
+    .connection-path {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1;
+    }
   }
 
   .feature-section {
-    opacity: 0; /* Start hidden for scroll reveal */
+    opacity: 0;
   }
 
-  .hero-content {
-    perspective: 1000px; /* For 3D animations */
+  /* Disable 3D perspective on mobile */
+  @media (max-width: 767px) {
+    .hero-content {
+      perspective: none;
+    }
   }
 
   .feature-item {
@@ -105,100 +130,121 @@ const initialLang = currentLanguage.get();
 
   function updateContent(lang) {
     const t = translations[lang].features.hero;
-    
-    document.getElementById('capabilities-text').textContent = t.capabilities;
-    document.getElementById('next-gen-text').textContent = t.nextGen;
-    document.getElementById('traffic-management-text').textContent = t.trafficManagement;
-    document.getElementById('description-text').textContent = t.description;
+    requestAnimationFrame(() => {
+      document.getElementById('capabilities-text').textContent = t.capabilities;
+      document.getElementById('next-gen-text').textContent = t.nextGen;
+      document.getElementById('traffic-management-text').textContent = t.trafficManagement;
+      document.getElementById('description-text').textContent = t.description;
+    });
   }
 
   function initAnimations() {
-    // Initial section reveal
+    const isMobile = window.innerWidth < 768;
+    
+    // Simplified initial reveal for mobile
     gsap.to('.feature-section', {
       opacity: 1,
-      duration: 1,
+      duration: isMobile ? 0.5 : 1,
       ease: 'power2.out'
     });
 
-    // Staggered content reveal
+    // Optimized content reveal
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '.hero-content',
         start: 'top 80%',
         end: 'bottom 20%',
-        scrub: 1,
-        toggleActions: 'play reverse play reverse'
+        // Disable scrub on mobile for better performance
+        scrub: isMobile ? false : 1,
+        toggleActions: 'play none none reverse'
       }
     });
 
+    // Simplified animations for mobile
     tl.fromTo('.feature-item', {
-      y: 100,
+      y: isMobile ? 50 : 100,
       opacity: 0,
-      rotateX: -15
+      rotateX: isMobile ? 0 : -15 // Disable 3D transforms on mobile
     }, {
       y: 0,
       opacity: 1,
       rotateX: 0,
-      duration: 1,
-      stagger: 0.2,
+      duration: isMobile ? 0.5 : 1,
+      stagger: isMobile ? 0.1 : 0.2,
       ease: 'power3.out'
     });
 
-    // Background animations
-    const dataPoints = document.querySelectorAll('.data-point');
+    // Optimize background animations for mobile
+    const dataPoints = document.querySelectorAll('.data-point') as NodeListOf<HTMLElement>;
+    const dataPointCount = isMobile ? 4 : 10; // Reduce points for mobile
+
     dataPoints.forEach((point, index) => {
+      if (index >= dataPointCount) {
+        point.style.display = 'none';
+        return;
+      }
+
+      // Simplified animations for mobile
       gsap.set(point, {
         x: gsap.utils.random(0, window.innerWidth),
         y: gsap.utils.random(0, window.innerHeight),
       });
 
       gsap.to(point, {
-        duration: gsap.utils.random(3, 6),
-        x: `+=${gsap.utils.random(-300, 300)}`,
-        y: `+=${gsap.utils.random(-300, 300)}`,
-        opacity: gsap.utils.random(0.2, 0.6),
-        scale: gsap.utils.random(0.8, 1.5),
+        duration: isMobile ? 4 : gsap.utils.random(3, 6),
+        x: `+=${isMobile ? gsap.utils.random(-150, 150) : gsap.utils.random(-300, 300)}`,
+        y: `+=${isMobile ? gsap.utils.random(-150, 150) : gsap.utils.random(-300, 300)}`,
+        opacity: isMobile ? 0.3 : gsap.utils.random(0.2, 0.6),
+        scale: isMobile ? 1 : gsap.utils.random(0.8, 1.5),
         repeat: -1,
         yoyo: true,
         ease: "none",
-        delay: index * 0.2
+        delay: index * (isMobile ? 0.4 : 0.2)
       });
     });
 
-    // Grid animation with scroll effect
-    ScrollTrigger.create({
-      trigger: '.traffic-grid',
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1,
-      animation: gsap.to('.traffic-grid', {
-        backgroundPosition: '50px 50px',
-        ease: "none"
-      })
-    });
-
-    // Connection lines animation
-    const connectionPath = document.querySelector('.connection-path');
-    const points = [];
-    for (let i = 0; i < 5; i++) {
-      points.push({
-        x: gsap.utils.random(0, window.innerWidth),
-        y: gsap.utils.random(0, window.innerHeight)
+    // Optimize grid animation for mobile
+    if (!isMobile) {
+      ScrollTrigger.create({
+        trigger: '.traffic-grid',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        animation: gsap.to('.traffic-grid', {
+          backgroundPosition: '50px 50px',
+          ease: "none"
+        })
       });
     }
 
-    const pathString = points.reduce((acc, point, i) => (
-      `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`
-    ), '');
+    // Optimize connection lines for mobile
+    const connectionPath = document.querySelector('.connection-path');
+    if (connectionPath) {
+      const pointCount = isMobile ? 3 : 5;
+      const points = [];
+      
+      for (let i = 0; i < pointCount; i++) {
+        points.push({
+          x: gsap.utils.random(0, window.innerWidth),
+          y: gsap.utils.random(0, window.innerHeight)
+        });
+      }
 
-    gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
-    gsap.to(connectionPath, {
-      strokeDashoffset: 1000,
-      strokeDasharray: 1000,
-      duration: 10,
-      repeat: -1,
-      ease: "none"
-    });
+      const pathString = points.reduce((acc, point, i) => (
+        `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`
+      ), '');
+
+      gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
+      
+      // Slower, simpler animation for mobile
+      gsap.to(connectionPath, {
+        strokeDashoffset: isMobile ? 500 : 1000,
+        strokeDasharray: isMobile ? 500 : 1000,
+        duration: isMobile ? 15 : 10,
+        repeat: -1,
+        ease: "none"
+      });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach(st => st.kill());
@@ -208,24 +254,43 @@ const initialLang = currentLanguage.get();
     };
   }
 
+  // Debounced initialization
   function initFeatureHero() {
+    let animationCleanup: (() => void) | undefined;
     updateContent(currentLanguage.get());
-    const cleanupAnimations = initAnimations();
+    
+    // Delay animations for better initial load
+    const initTimeout = setTimeout(() => {
+      animationCleanup = initAnimations();
+    }, 100);
+
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });
 
+    // Return cleanup function
     return () => {
-      cleanupAnimations();
+      clearTimeout(initTimeout);
+      if (animationCleanup) {
+        animationCleanup();
+      }
       unsubscribe();
     };
   }
 
+  // Handle page load with debouncing
+  let initTimeout: number;
   document.addEventListener('astro:page-load', () => {
-    const cleanup = initFeatureHero();
-    
-    document.addEventListener('astro:before-preparation', () => {
-      cleanup();
-    }, { once: true });
+    clearTimeout(initTimeout);
+    initTimeout = setTimeout(() => {
+      const cleanup = initFeatureHero();
+      
+      document.addEventListener('astro:before-preparation', () => {
+        if (cleanup) {
+          cleanup();
+        }
+      }, { once: true });
+    }, 100);
   });
+</script>
 </script>

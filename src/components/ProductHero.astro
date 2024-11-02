@@ -212,121 +212,192 @@ const initialLang = currentLanguage.get();
   import gsap from 'gsap';
 
   function initAnimations() {
-    // Create traffic flow animation
-    const dataPoints = document.querySelectorAll('.data-point');
+    // Check if device is mobile
+    const isMobile = window.innerWidth < 768;
     
+    // Reduce number of data points for mobile
+    const dataPointCount = isMobile ? 4 : 10;
+    const dataPoints = document.querySelectorAll('.data-point') as NodeListOf<HTMLElement>;
+    
+    // Hide excess data points on mobile
     dataPoints.forEach((point, index) => {
-      // Random starting positions
+      if (index >= dataPointCount) {
+        point.style.display = 'none';
+        return;
+      }
+
+      // Simplified animation for mobile
       gsap.set(point, {
         x: gsap.utils.random(0, window.innerWidth),
         y: gsap.utils.random(0, window.innerHeight),
       });
 
-      // Animate each point
+      // Reduced animation complexity for mobile
       gsap.to(point, {
-        duration: gsap.utils.random(3, 6),
-        x: `+=${gsap.utils.random(-300, 300)}`,
-        y: `+=${gsap.utils.random(-300, 300)}`,
-        opacity: gsap.utils.random(0.2, 0.6),
-        scale: gsap.utils.random(0.8, 1.5),
+        duration: isMobile ? 4 : gsap.utils.random(3, 6),
+        x: `+=${isMobile ? gsap.utils.random(-150, 150) : gsap.utils.random(-300, 300)}`,
+        y: `+=${isMobile ? gsap.utils.random(-150, 150) : gsap.utils.random(-300, 300)}`,
+        opacity: isMobile ? 0.3 : gsap.utils.random(0.2, 0.6),
+        scale: isMobile ? 1 : gsap.utils.random(0.8, 1.5),
         repeat: -1,
         yoyo: true,
         ease: "none",
-        delay: index * 0.2
+        delay: index * (isMobile ? 0.4 : 0.2)
       });
     });
 
-    // Animate grid
-    gsap.to('.traffic-grid', {
-      backgroundPosition: '50px 50px',
-      duration: 20,
-      repeat: -1,
-      ease: "none"
-    });
-
-    // Create connection lines animation
-    const connectionPath = document.querySelector('.connection-path');
-    const points = [];
-    
-    // Generate random connection points
-    for (let i = 0; i < 5; i++) {
-      points.push({
-        x: gsap.utils.random(0, window.innerWidth),
-        y: gsap.utils.random(0, window.innerHeight)
+    // Simplified grid animation for mobile
+    if (isMobile) {
+      gsap.to('.traffic-grid', {
+        backgroundPosition: '25px 25px',
+        duration: 30,
+        repeat: -1,
+        ease: "none"
+      });
+    } else {
+      gsap.to('.traffic-grid', {
+        backgroundPosition: '50px 50px',
+        duration: 20,
+        repeat: -1,
+        ease: "none"
       });
     }
 
-    // Create path string
-    const pathString = points.reduce((acc, point, i) => {
-      return `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`;
-    }, '');
+    // Optimize connection lines for mobile
+    const connectionPath = document.querySelector('.connection-path');
+    if (connectionPath) {
+      // Fewer points for mobile
+      const pointCount = isMobile ? 3 : 5;
+      const points = [];
+      
+      for (let i = 0; i < pointCount; i++) {
+        points.push({
+          x: gsap.utils.random(0, window.innerWidth),
+          y: gsap.utils.random(0, window.innerHeight)
+        });
+      }
 
-    // Set and animate path
-    gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
-    gsap.to(connectionPath, {
-      strokeDashoffset: 1000,
-      strokeDasharray: 1000,
-      duration: 10,
-      repeat: -1,
-      ease: "none"
+      const pathString = points.reduce((acc, point, i) => (
+        `${acc}${i === 0 ? 'M' : 'L'}${point.x},${point.y}`
+      ), '');
+
+      gsap.set(connectionPath, { attr: { d: pathString + 'Z' } });
+      
+      // Slower animation for mobile
+      gsap.to(connectionPath, {
+        strokeDashoffset: isMobile ? 500 : 1000,
+        strokeDasharray: isMobile ? 500 : 1000,
+        duration: isMobile ? 15 : 10,
+        repeat: -1,
+        ease: "none"
+      });
+    }
+
+    // Optimize content animations
+    const tl = gsap.timeline({ 
+      defaults: { 
+        ease: "power3.out",
+        duration: isMobile ? 0.6 : 0.8 
+      }
     });
 
-    // Animate content entrance
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
     tl.from('#hero-label', {
-      y: 30,
+      y: 20,
       opacity: 0,
-      duration: 0.8
     })
     .from('#hero-title-1, #hero-title-2', {
-      y: 50,
-      opacity: 0,
-      stagger: 0.2,
-      duration: 0.8
-    }, "-=0.4")
-    .from('#hero-description', {
       y: 30,
       opacity: 0,
-      duration: 0.8
-    }, "-=0.4");
+      stagger: 0.15,
+    }, "-=0.3")
+    .from('#hero-description', {
+      y: 20,
+      opacity: 0,
+    }, "-=0.3");
   }
 
   function updateContent(lang) {
     const t = translations[lang].products.hero;
-
-    // Update content
-    document.getElementById('hero-label').textContent = t.label;
-    document.getElementById('hero-title-1').textContent = t.title1;
-    document.getElementById('hero-title-2').textContent = t.title2;
-    document.getElementById('hero-description').textContent = t.description;
+    requestAnimationFrame(() => {
+      document.getElementById('hero-label').textContent = t.label;
+      document.getElementById('hero-title-1').textContent = t.title1;
+      document.getElementById('hero-title-2').textContent = t.title2;
+      document.getElementById('hero-description').textContent = t.description;
+    });
   }
 
   function initProductHero() {
     // Initial content update
     updateContent(currentLanguage.get());
 
-    // Initialize animations
-    initAnimations();
+    // Delay animations slightly to ensure smooth page load
+    setTimeout(() => {
+      initAnimations();
+    }, 100);
 
-    // Language change subscription
     const unsubscribe = currentLanguage.subscribe(newLang => {
       updateContent(newLang);
     });
 
-    return unsubscribe;
-  }
-
-  // Handle initial load and page transitions
-  document.addEventListener('astro:page-load', () => {
-    const unsubscribe = initProductHero();
-    
-    document.addEventListener('astro:before-preparation', () => {
-      // Kill all GSAP animations before page transition
+    return () => {
       gsap.killTweensOf('.data-point');
       gsap.killTweensOf('.traffic-grid');
       gsap.killTweensOf('.connection-path');
       unsubscribe();
-    }, { once: true });
+    };
+  }
+
+  // Handle initial load and page transitions with debouncing
+  let initTimeout: number;
+  document.addEventListener('astro:page-load', () => {
+    clearTimeout(initTimeout);
+    initTimeout = setTimeout(() => {
+      const cleanup = initProductHero();
+      
+      document.addEventListener('astro:before-preparation', () => {
+        cleanup();
+      }, { once: true });
+    }, 100);
   });
 </script>
+
+<style>
+  /* Optimize grid for mobile */
+  .traffic-grid {
+    background-image: linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+                      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 25px 25px;
+  }
+
+  @media (min-width: 768px) {
+    .traffic-grid {
+      background-size: 50px 50px;
+      background-image: linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px),
+                        linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px);
+    }
+  }
+
+  .data-point {
+    @apply absolute w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-forlux-orange-primary/40 md:bg-forlux-orange-primary/60;
+    filter: blur(0.5px);
+  }
+
+  @media (min-width: 768px) {
+    .data-point {
+      filter: blur(1px);
+    }
+  }
+
+  .connection-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 0.5;
+  }
+
+  @media (min-width: 768px) {
+    .connection-path {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1;
+    }
+  }
+</style>

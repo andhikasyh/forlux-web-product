@@ -9,7 +9,7 @@ const navItems = [
 ];
 ---
 
-<nav class="fixed w-full z-50 backdrop-blur-xl border-b border-white/5">
+<nav class="fixed w-full z-[100] backdrop-blur-xl border-b border-white/5">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
       <!-- Logo and Brand -->
@@ -89,9 +89,9 @@ const navItems = [
   <!-- Mobile Navigation Menu -->
   <div 
     id="mobile-menu" 
-    class="hidden md:hidden absolute top-16 left-0 w-full transform transition-transform duration-200 ease-in-out"
+    class="hidden md:hidden fixed top-16 left-0 w-full h-screen bg-slate-900/95 backdrop-blur-xl transform transition-transform duration-200 ease-in-out z-50"
   >
-    <div class="px-4 pt-2 pb-3 space-y-2 bg-slate-900/95 backdrop-blur-xl border-b border-white/5 shadow-lg">
+    <div class="px-4 pt-2 pb-3 space-y-2 border-b border-white/5 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto">
       {navItems.map(item => (
         <a
           href={item.path}
@@ -110,58 +110,6 @@ const navItems = [
   </div>
 </nav>
 
-<script>
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
-
-  function toggleMenu(show: boolean) {
-    if (show) {
-      mobileMenu?.classList.remove('hidden');
-      menuIcon?.classList.add('hidden');
-      closeIcon?.classList.remove('hidden');
-      mobileMenuButton?.setAttribute('aria-expanded', 'true');
-      // Add slide down animation
-      requestAnimationFrame(() => {
-        mobileMenu?.classList.add('translate-y-0');
-        mobileMenu?.classList.remove('-translate-y-full');
-      });
-    } else {
-      menuIcon?.classList.remove('hidden');
-      closeIcon?.classList.add('hidden');
-      mobileMenuButton?.setAttribute('aria-expanded', 'false');
-      // Add slide up animation
-      mobileMenu?.classList.add('-translate-y-full');
-      mobileMenu?.classList.remove('translate-y-0');
-      // Hide after animation
-      setTimeout(() => {
-        mobileMenu?.classList.add('hidden');
-      }, 200);
-    }
-  }
-
-  mobileMenuButton?.addEventListener('click', () => {
-    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-    toggleMenu(!isExpanded);
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', (event) => {
-    const target = event.target as Node;
-    if (!mobileMenuButton?.contains(target) && !mobileMenu?.contains(target)) {
-      toggleMenu(false);
-    }
-  });
-
-  // Close mobile menu when window is resized to desktop size
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768) {
-      toggleMenu(false);
-    }
-  });
-</script>
-
 <style>
   .gradient-border {
     position: relative;
@@ -178,4 +126,80 @@ const navItems = [
   #mobile-menu.translate-y-0 {
     transform: translateY(0);
   }
+
+  /* Prevent body scroll when menu is open */
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
 </style>
+
+<script>
+  function initMobileMenu() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    function toggleMenu(show: boolean) {
+      if (show) {
+        mobileMenu?.classList.remove('hidden');
+        menuIcon?.classList.add('hidden');
+        closeIcon?.classList.remove('hidden');
+        mobileMenuButton?.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('menu-open');
+        requestAnimationFrame(() => {
+          mobileMenu?.classList.add('translate-y-0');
+          mobileMenu?.classList.remove('-translate-y-full');
+        });
+      } else {
+        menuIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+        mobileMenuButton?.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+        mobileMenu?.classList.add('-translate-y-full');
+        mobileMenu?.classList.remove('translate-y-0');
+        setTimeout(() => {
+          mobileMenu?.classList.add('hidden');
+        }, 200);
+      }
+    }
+
+    // Add click event listener
+    mobileMenuButton?.addEventListener('click', () => {
+      const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+      toggleMenu(!isExpanded);
+    });
+
+    // Close mobile menu when clicking outside
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!mobileMenuButton?.contains(target) && !mobileMenu?.contains(target)) {
+        toggleMenu(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+
+    // Close mobile menu when window is resized
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        toggleMenu(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Return cleanup function
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+      window.removeEventListener('resize', handleResize);
+    };
+  }
+
+  // Initialize on page load and transitions
+  document.addEventListener('astro:page-load', () => {
+    const cleanup = initMobileMenu();
+    
+    document.addEventListener('astro:before-preparation', () => {
+      cleanup();
+    }, { once: true });
+  });
+</script>

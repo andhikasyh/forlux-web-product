@@ -9,55 +9,177 @@ import ContactCTA from '../components/ContactCTA.astro';
 ---
 
 <Layout title="Features">
-  <main class="relative scroll-smooth">
-    <!-- Add smooth scroll container -->
+  <main class="relative scroll-smooth overflow-hidden">
+    <!-- Add smooth scroll container with improved mobile padding -->
     <div class="smooth-scroll-container">
-      <FeatureHero />
-      <FeatureShowcase />
-      <TechnologyStack />
-      <IntegrationDemo client:load />
-      <SystemArchitecture />
-      <ContactCTA />
+      <!-- Add padding-top to account for fixed navbar -->
+      <div class="pt-16 sm:pt-20">
+        <FeatureHero />
+        <div class="space-y-16 sm:space-y-24 md:space-y-32">
+          <section class="px-4 sm:px-6 lg:px-8">
+            <FeatureShowcase />
+          </section>
+          
+          <section class="px-4 sm:px-6 lg:px-8">
+            <TechnologyStack />
+          </section>
+          
+          <section class="px-4 sm:px-6 lg:px-8">
+            <IntegrationDemo client:load />
+          </section>
+          
+          <section class="px-4 sm:px-6 lg:px-8">
+            <SystemArchitecture />
+          </section>
+          
+          <section class="px-4 sm:px-6 lg:px-8">
+            <ContactCTA />
+          </section>
+        </div>
+      </div>
     </div>
   </main>
 </Layout>
 
 <style>
-  html {
-    scroll-behavior: smooth;
+  /* Base styles */
+  :root {
+    --navbar-height: 4rem;
+    --section-spacing: 2rem;
   }
 
-  .smooth-scroll-container {
-    @apply relative;
-    /* Optional: Add native smooth scroll for browsers that support it */
+  @media (min-width: 640px) {
+    :root {
+      --navbar-height: 5rem;
+      --section-spacing: 3rem;
+    }
+  }
+
+  /* Smooth scroll behavior */
+  html {
     scroll-behavior: smooth;
-    /* Hide scrollbar but keep functionality */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Container styles */
+  .smooth-scroll-container {
+    @apply relative min-h-screen;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .smooth-scroll-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
+  }
+
+  /* Section spacing and responsiveness */
+  section {
+    @apply relative;
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .smooth-scroll-container {
+      touch-action: pan-y pinch-zoom;
+    }
+
+    section {
+      scroll-margin-top: var(--navbar-height);
+    }
+  }
+
+  /* Tablet and desktop optimizations */
+  @media (min-width: 641px) {
+    section {
+      scroll-margin-top: calc(var(--navbar-height) + 1rem);
+    }
+  }
+
+  /* Prevent content shift on load */
+  .smooth-scroll-container {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
   }
 </style>
 
 <script>
   import gsap from 'gsap';
   import ScrollTrigger from 'gsap/ScrollTrigger';
+  import { debounce } from 'lodash';
 
   gsap.registerPlugin(ScrollTrigger);
 
-  function initSmoothScroll() {
+  function initSmoothScroll(): () => void {
+    // Handle smooth scrolling for anchor links
+    const anchorListeners: Array<() => void> = [];
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      const listener = (e: Event) => {
+        e.preventDefault();
+        const href = (anchor as HTMLAnchorElement).getAttribute('href');
+        if (href) {
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }
+      };
+      anchor.addEventListener('click', listener);
+      anchorListeners.push(() => anchor.removeEventListener('click', listener));
+    });
+
+    // Optimize scroll performance
+    const scrollContainer = document.querySelector('.smooth-scroll-container');
+    const handleScroll = debounce(() => {
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    }, 100);
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+    }
+
+    // Handle resize events
+    const handleResize = debounce(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
+    window.addEventListener('resize', handleResize);
+
+    // Return cleanup function
     return () => {
+      // Clean up scroll triggers
       ScrollTrigger.getAll().forEach(st => st.kill());
+      
+      // Clean up event listeners
+      anchorListeners.forEach(cleanup => cleanup());
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
+      window.removeEventListener('resize', handleResize);
+      
+      // Clean up debounced functions
+      handleScroll.cancel();
+      handleResize.cancel();
     };
   }
 
+  // Handle page load with proper typing
   document.addEventListener('astro:page-load', () => {
     const cleanup = initSmoothScroll();
     
     document.addEventListener('astro:before-preparation', () => {
-      cleanup && cleanup();
+      if (typeof cleanup === 'function') {
+        cleanup();
+      }
     }, { once: true });
   });
 </script>
