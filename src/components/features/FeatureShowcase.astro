@@ -1,0 +1,95 @@
+---
+import ModularAnimation from './animations/ModularAnimation';
+import DetectionAnimation from './animations/DetectionAnimation';
+import CommandAnimation from './animations/CommandAnimation';
+
+const features = [
+  {
+    title: "Modular Traffic Control",
+    description: "Revolutionary hot-swappable design with redundant systems ensures zero downtime during maintenance or upgrades.",
+    icon: "🔄",
+    gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
+    stats: [
+      { value: "0", label: "Downtime" },
+      { value: "< 30s", label: "Module Swap" }
+    ],
+    animation: "modular"
+  },
+  {
+    title: "AI-Powered Incident Detection",
+    description: "Advanced computer vision algorithms detect and respond to traffic incidents in real-time.",
+    icon: "👁️",
+    gradient: "from-forlux-green-primary to-forlux-green-secondary",
+    stats: [
+      { value: "98%", label: "Detection Rate" },
+      { value: "< 3s", label: "Response Time" }
+    ],
+    animation: "detection"
+  },
+  {
+    title: "Integrated Command Center",
+    description: "GIS-based monitoring system providing comprehensive city-wide traffic management.",
+    icon: "🌍",
+    gradient: "from-forlux-orange-secondary to-forlux-orange-accent",
+    stats: [
+      { value: "100%", label: "Coverage" },
+      { value: "Real-time", label: "Updates" }
+    ],
+    animation: "command"
+  }
+];
+---
+
+<section class="relative py-32">
+  <div class="container mx-auto px-4">
+    {features.map((feature, index) => (
+      <div 
+        class="mb-32 last:mb-0"
+        data-aos="fade-up"
+        data-aos-delay={index * 100}
+      >
+        <div class="glass-card p-8 relative overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div class="space-y-6">
+              <div class="flex items-center space-x-4">
+                <span class="text-4xl">{feature.icon}</span>
+                <h3 class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+                  {feature.title}
+                </h3>
+              </div>
+              
+              <p class="text-gray-400 leading-relaxed">
+                {feature.description}
+              </p>
+
+              <div class="flex space-x-8">
+                {feature.stats.map(stat => (
+                  <div>
+                    <div class={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+                      {stat.value}
+                    </div>
+                    <div class="text-sm text-gray-400">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="relative h-[400px] bg-slate-900/50 rounded-lg overflow-hidden">
+              {feature.animation === "modular" && (
+                <ModularAnimation client:visible />
+              )}
+              {feature.animation === "detection" && (
+                <DetectionAnimation client:visible />
+              )}
+              {feature.animation === "command" && (
+                <CommandAnimation client:visible />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

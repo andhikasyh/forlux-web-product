@@ -1,0 +1,48 @@
+---
+const stats = [
+  {
+    value: "99.9%",
+    label: "System Reliability",
+    description: "Industry-leading uptime and performance"
+  },
+  {
+    value: "60%+",
+    label: "TKDN Certified",
+    description: "Supporting Indonesian manufacturing"
+  },
+  {
+    value: "< 50ms",
+    label: "Response Time",
+    description: "Real-time traffic management"
+  },
+  {
+    value: "24/7",
+    label: "Support",
+    description: "Local technical assistance"
+  }
+];
+---
+
+<section class="relative py-20">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {stats.map((stat, index) => (
+        <div 
+          class="glass-card p-6 text-center"
+          data-aos="fade-up"
+          data-aos-delay={index * 100}
+        >
+          <div class="text-3xl font-bold text-forlux-orange-primary mb-2">
+            {stat.value}
+          </div>
+          <div class="text-sm font-semibold text-white mb-1">
+            {stat.label}
+          </div>
+          <p class="text-xs text-gray-400">
+            {stat.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

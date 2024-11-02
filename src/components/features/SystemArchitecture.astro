@@ -1,0 +1,142 @@
+---
+const architectureComponents = [
+  {
+    title: "Edge Devices",
+    description: "Distributed processing units powered by ARM Cortex M4",
+    items: [
+      "Traffic controllers",
+      "Smart cameras",
+      "Environmental sensors",
+      "Vehicle detectors"
+    ],
+    gradient: "from-forlux-orange-primary to-forlux-orange-secondary"
+  },
+  {
+    title: "Network Layer",
+    description: "High-speed fiber optic communication infrastructure",
+    items: [
+      "Redundant connections",
+      "Secure protocols",
+      "Real-time data transfer",
+      "Fault tolerance"
+    ],
+    gradient: "from-forlux-green-primary to-forlux-green-secondary"
+  },
+  {
+    title: "Control Center",
+    description: "Centralized management and monitoring system",
+    items: [
+      "AI analytics engine",
+      "GIS integration",
+      "Command dashboard",
+      "Data visualization"
+    ],
+    gradient: "from-forlux-orange-secondary to-forlux-orange-accent"
+  }
+];
+---
+
+<section class="relative py-32 bg-slate-900/50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
+      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4">
+        System Architecture
+      </span>
+      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient">
+        Engineered for Scale
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        A robust and scalable architecture designed for growing cities
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+      {architectureComponents.map((component, index) => (
+        <div 
+          class="glass-card p-6 relative group h-full"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay={index * 300}
+        >
+          <div class={`absolute inset-0 bg-gradient-to-r ${component.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-xl`}></div>
+          
+          <h3 
+            class={`text-xl font-bold mb-4 bg-gradient-to-r ${component.gradient} bg-clip-text text-transparent`}
+            data-aos="fade-down"
+            data-aos-duration="800"
+            data-aos-delay={index * 300 + 200}
+          >
+            {component.title}
+          </h3>
+          
+          <p 
+            class="text-gray-400 text-sm mb-6"
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay={index * 300 + 400}
+          >
+            {component.description}
+          </p>
+
+          <ul class="space-y-3">
+            {component.items.map((item, itemIndex) => (
+              <li 
+                class="flex items-center text-sm text-gray-400"
+                data-aos="fade-left"
+                data-aos-duration="600"
+                data-aos-delay={index * 300 + 600 + (itemIndex * 150)}
+              >
+                <span class={`w-1.5 h-1.5 rounded-full mr-2 bg-gradient-to-r ${component.gradient}`}></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          {index < 2 && (
+            <>
+              <div 
+                class="hidden md:block absolute top-1/2 z-10"
+                style="right: -2rem; width: 4rem;"
+                data-aos="fade-left"
+                data-aos-duration="800"
+                data-aos-delay={index * 300 + 1000}
+              >
+                <div class="absolute top-1/2 -translate-y-1/2 w-full h-[2px]">
+                  <div class={`w-full h-full bg-gradient-to-r 
+                    ${index === 0 
+                      ? "from-forlux-orange-secondary via-forlux-green-primary to-transparent"
+                      : "from-forlux-green-secondary via-forlux-orange-secondary to-transparent"
+                    }`}
+                  ></div>
+                </div>
+
+                <div class={`absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full
+                  ${index === 0 
+                    ? "bg-forlux-orange-secondary"
+                    : "bg-forlux-green-secondary"
+                  }`}
+                ></div>
+
+                <div class={`absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full
+                  ${index === 0 
+                    ? "bg-forlux-green-primary"
+                    : "bg-forlux-orange-secondary"
+                  }`}
+                ></div>
+              </div>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .glass-card {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+  }
+</style>

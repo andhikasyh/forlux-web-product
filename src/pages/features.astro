@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FeatureHero from '../components/features/FeatureHero.astro';
+import FeatureShowcase from '../components/features/FeatureShowcase.astro';
+import TechnologyStack from '../components/features/TechnologyStack.astro';
+import IntegrationDemo from '../components/features/IntegrationDemo';
+import SystemArchitecture from '../components/features/SystemArchitecture.astro';
+
+---
+
+<Layout title="Features">
+  <FeatureHero />
+  <FeatureShowcase />
+  <TechnologyStack />
+  <IntegrationDemo client:load />
+  <SystemArchitecture />
+</Layout>

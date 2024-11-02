@@ -1,0 +1,73 @@
+---
+const milestones = [
+  {
+    year: 1999,
+    title: "Company Founded",
+    description: "Established as a pioneer in Indonesian traffic systems"
+  },
+  {
+    year: 2005,
+    title: "First Traffic System",
+    description: "Launched our first digital traffic control system in Jakarta"
+  },
+  {
+    year: 2012,
+    title: "AI Integration",
+    description: "Introduced machine learning for traffic prediction"
+  },
+  {
+    year: 2018,
+    title: "FORLUX Launch",
+    description: "Released FORLUX, our flagship smart traffic platform"
+  },
+  {
+    year: 2021,
+    title: "National Expansion",
+    description: "Extended operations to 15 major Indonesian cities"
+  },
+  {
+    year: 2024,
+    title: "Next Generation",
+    description: "Launched ARM-powered traffic controllers"
+  }
+];
+---
+
+<div class="relative py-16">
+  {/* Timeline Line */}
+  <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-forlux-orange-primary/20 via-forlux-orange-primary/10 to-transparent"></div>
+
+  <div class="relative max-w-5xl mx-auto">
+    {milestones.map((milestone, index) => (
+      <div 
+        class={`relative flex items-center gap-8 mb-16 last:mb-0 ${
+          index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
+        }`}
+        data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+        data-aos-delay={index * 100}
+      >
+        {/* Content */}
+        <div class="flex-1">
+          <div class="glass-card p-6 relative group">
+            <div class="absolute inset-0 bg-gradient-to-r from-forlux-orange-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+            <span class="text-4xl font-bold bg-clip-text text-transparent bg-forlux-orange-gradient">
+              {milestone.year}
+            </span>
+            <h3 class="text-xl font-bold text-white mt-2 mb-3">{milestone.title}</h3>
+            <p class="text-gray-400">{milestone.description}</p>
+          </div>
+        </div>
+
+        {/* Timeline Node */}
+        <div class="relative flex-shrink-0 w-4">
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div class="w-4 h-4 rounded-full bg-gradient-to-r from-forlux-orange-primary to-forlux-orange-secondary"></div>
+            <div class="absolute inset-0 rounded-full bg-forlux-orange-primary/20 animate-ping"></div>
+          </div>
+        </div>
+
+        <div class="flex-1"></div>
+      </div>
+    ))}
+  </div>
+</div>

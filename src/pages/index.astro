@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Products from '../components/Products.astro';
+import Analytics from '../components/Analytics';
+import TrafficManagement from '../components/TrafficManagement';
+import ContactCTA from '../components/ContactCTA.astro';
+
+---
+
+<Layout title="Smart Urban Lighting">
+  <Hero />
+  <Products />
+  <Analytics client:load />
+  <TrafficManagement client:load />
+  <ContactCTA />
+</Layout>

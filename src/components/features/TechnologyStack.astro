@@ -1,0 +1,162 @@
+---
+const technologies = [
+  {
+    category: "Core Processing",
+    description: "Industrial-grade computing power designed for mission-critical traffic management",
+    gradient: "from-forlux-orange-primary to-forlux-orange-secondary",
+    items: [
+      { 
+        name: "ARM Cortex M4",
+        description: "High-temperature T7 series processor",
+        icon: "⚡",
+        specs: ["Industrial-grade reliability", "Advanced thermal management", "Real-time processing"]
+      },
+      { 
+        name: "Edge Computing",
+        description: "On-device AI processing",
+        icon: "🔮",
+        specs: ["Local data processing", "Reduced latency", "Enhanced privacy"]
+      },
+      { 
+        name: "AI Acceleration",
+        description: "Hardware-optimized machine learning",
+        icon: "🧠",
+        specs: ["Neural network optimization", "Real-time inference", "Adaptive learning"]
+      }
+    ]
+  },
+  {
+    category: "Network Infrastructure",
+    description: "High-speed, reliable connectivity ensuring seamless traffic management",
+    gradient: "from-forlux-green-primary to-forlux-green-secondary",
+    items: [
+      { 
+        name: "Fiber Optic",
+        description: "Ultra-fast data transmission",
+        icon: "🌐",
+        specs: ["Low latency", "High bandwidth", "Interference immunity"]
+      },
+      { 
+        name: "Redundant Links",
+        description: "Failsafe communication",
+        icon: "🔄",
+        specs: ["99.99% uptime", "Automatic failover", "Load balancing"]
+      },
+      { 
+        name: "Secure Protocol",
+        description: "Enterprise-grade security",
+        icon: "🔒",
+        specs: ["End-to-end encryption", "Access control", "Audit logging"]
+      }
+    ]
+  },
+  {
+    category: "Software Stack",
+    description: "Advanced software solutions for intelligent traffic management",
+    gradient: "from-forlux-orange-secondary to-forlux-orange-accent",
+    items: [
+      { 
+        name: "FORLUX OS",
+        description: "Custom real-time operating system",
+        icon: "💻",
+        specs: ["Deterministic performance", "Resource optimization", "Secure boot"]
+      },
+      { 
+        name: "AI Engine",
+        description: "Intelligent traffic prediction",
+        icon: "🤖",
+        specs: ["Pattern recognition", "Predictive analytics", "Adaptive control"]
+      },
+      { 
+        name: "GIS Integration",
+        description: "Advanced spatial analysis",
+        icon: "🗺️",
+        specs: ["Real-time mapping", "Route optimization", "Spatial analytics"]
+      }
+    ]
+  }
+];
+---
+
+<section class="relative py-32 bg-slate-900/50">
+  <div class="container mx-auto px-4">
+    <div 
+      class="text-center mb-16"
+      data-aos="fade-up"
+      data-aos-duration="800"
+    >
+      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-green-primary bg-forlux-green-primary/10 rounded-full border border-forlux-green-primary/20 mb-4">
+        Technology Stack
+      </span>
+      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-green-gradient">
+        Built for Performance
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        Powered by cutting-edge technology and engineered for reliability
+      </p>
+    </div>
+
+    <div class="space-y-24">
+      {technologies.map((tech, categoryIndex) => (
+        <div 
+          class="space-y-12"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay={categoryIndex * 200}
+        >
+          <div class="text-center">
+            <h3 class={`text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r ${tech.gradient}`}>
+              {tech.category}
+            </h3>
+            <p class="text-gray-400 max-w-2xl mx-auto">{tech.description}</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {tech.items.map((item, itemIndex) => (
+              <div 
+                class="group relative"
+                data-aos="zoom-in"
+                data-aos-duration="800"
+                data-aos-delay={itemIndex * 100}
+              >
+                {/* Gradient Background */}
+                <div class={`absolute inset-0 bg-gradient-to-r ${tech.gradient} opacity-0 group-hover:opacity-5 transition-all duration-500 rounded-xl blur-xl`}></div>
+                
+                {/* Card Content */}
+                <div class="glass-card p-6 relative z-10 h-full transition-transform duration-500 group-hover:scale-[1.02]">
+                  <div class="relative mb-6">
+                    <span class="relative text-4xl block mb-4 transition-transform duration-300 group-hover:scale-110">{item.icon}</span>
+                    <h4 class={`text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r ${tech.gradient} transition-colors duration-300`}>
+                      {item.name}
+                    </h4>
+                    <p class="text-gray-400 text-sm">{item.description}</p>
+                  </div>
+
+                  <ul class="space-y-3">
+                    {item.specs.map((spec, specIndex) => (
+                      <li 
+                        class="flex items-center text-sm text-gray-400 transform translate-x-0 group-hover:translate-x-2 transition-all duration-300"
+                        style={{
+                          transitionDelay: `${specIndex * 50}ms`
+                        }}
+                      >
+                        <div class="relative">
+                          <div class={`absolute inset-0 bg-gradient-to-r ${tech.gradient} opacity-20 rounded-full blur group-hover:opacity-50 transition-opacity duration-300`}></div>
+                          <div class={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${tech.gradient} relative z-10`}></div>
+                        </div>
+                        <span class="ml-2">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Bottom Gradient Line */}
+                  <div class={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${tech.gradient} opacity-0 group-hover:opacity-20 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100 origin-left rounded-full`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

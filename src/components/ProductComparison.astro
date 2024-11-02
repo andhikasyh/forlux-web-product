@@ -1,0 +1,90 @@
+---
+const features = [
+  {
+    category: "Core Features",
+    items: [
+      { name: "Traffic Detection", forlux: true, others: true },
+      { name: "Real-time Monitoring", forlux: true, others: true },
+      { name: "AI-powered Analytics", forlux: true, others: false },
+      { name: "Predictive Control", forlux: true, others: false }
+    ]
+  },
+  {
+    category: "Technical Specs",
+    items: [
+      { name: "ARM Cortex M4", forlux: true, others: false },
+      { name: "Hot-swappable Modules", forlux: true, others: false },
+      { name: "Fiber Network Ready", forlux: true, others: true },
+      { name: "Edge Processing", forlux: true, others: false }
+    ]
+  },
+  {
+    category: "Support & Service",
+    items: [
+      { name: "24/7 Local Support", forlux: true, others: false },
+      { name: "Remote Diagnostics", forlux: true, others: true },
+      { name: "Predictive Maintenance", forlux: true, others: false },
+      { name: "Custom Integration", forlux: true, others: false }
+    ]
+  }
+];
+---
+
+<section class="relative py-32">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
+        Why Choose FORLUX
+      </span>
+      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
+        The FORLUX Advantage
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        See how FORLUX sets new standards in traffic management technology
+      </p>
+    </div>
+
+    <div class="glass-card p-8" data-aos="fade-up">
+      {features.map((category) => (
+        <div class="mb-8 last:mb-0">
+          <h3 class="text-xl font-bold mb-4 text-white">
+            {category.category}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {category.items.map((item) => (
+              <div class="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                <span class="text-sm text-gray-400">{item.name}</span>
+                <div class="flex items-center space-x-8">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-forlux-orange-primary">FORLUX</span>
+                    {item.forlux ? (
+                      <svg class="w-5 h-5 text-forlux-orange-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    ) : (
+                      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                    )}
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-500">Others</span>
+                    {item.others ? (
+                      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    ) : (
+                      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

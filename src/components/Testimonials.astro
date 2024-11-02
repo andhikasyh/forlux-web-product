@@ -1,0 +1,37 @@
+---
+const testimonials = [
+  {
+    name: 'John Smith',
+    role: 'CEO, Tech Corp',
+    content: 'Working with Caturmukti has transformed our business operations.',
+    image: '/testimonials/john.jpg'
+  },
+  {
+    name: 'Sarah Johnson',
+    role: 'Director, Innovation Labs',
+    content: 'Their expertise and dedication to excellence is unmatched.',
+    image: '/testimonials/sarah.jpg'
+  }
+];
+---
+
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-bold text-gray-900">What Our Clients Say</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {testimonials.map(testimonial => (
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <p class="text-gray-600 mb-6">"{testimonial.content}"</p>
+          <div class="flex items-center">
+            <div class="ml-4">
+              <p class="font-bold">{testimonial.name}</p>
+              <p class="text-gray-600">{testimonial.role}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

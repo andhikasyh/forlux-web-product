@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<section class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden py-16 sm:py-20 lg:py-32">
+  <!-- Background effects remain the same -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/20 to-transparent opacity-30 blur-3xl"></div>
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-forlux-orange-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-forlux-green-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+  </div>
+
+  <div class="container relative z-10 px-4 mx-auto">
+    <div class="text-center max-w-4xl mx-auto">
+      <div class="relative mb-6 sm:mb-8 inline-block" data-aos="fade-down">
+        <div class="absolute inset-0 bg-forlux-orange-gradient blur-xl opacity-30"></div>
+        <span class="relative inline-block px-4 py-2 text-sm sm:text-base font-semibold text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20">
+          International Quality, Indonesian Pride
+        </span>
+      </div>
+
+      <h1 
+        class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8 text-white leading-tight"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <span class="bg-clip-text text-transparent bg-forlux-orange-gradient">
+          Revolutionizing
+        </span>
+        <br class="hidden sm:block" />
+        Traffic Management
+      </h1>
+
+      <p 
+        class="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        Experience FORLUX, Indonesia's first AI-powered traffic system. Built with world-class technology and backed by 20 years of expertise in traffic management solutions.
+      </p>
+
+      <div 
+        class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <a href="/products" class="w-full sm:w-auto">
+          <div class="gradient-border">
+            <span class="block px-6 sm:px-8 py-3 bg-[#1a1f2d] rounded-lg font-semibold text-white hover:bg-[#1a1f2d]/80 transition-all duration-300">
+              Discover Solutions
+            </span>
+          </div>
+        </a>
+        <a 
+          href="/contact" 
+          class="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-lg font-semibold text-white border border-forlux-orange-primary/20 hover:bg-forlux-orange-primary/5 transition-all duration-300"
+        >
+          Schedule Demo
+        </a>
+      </div>
+
+      <div 
+        class="mt-16 sm:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 max-w-3xl mx-auto"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
+        {[
+          { value: 'TKDN', label: '> 60% Local Content' },
+          { value: 'ISO', label: '27001 Certified' },
+          { value: 'ARM', label: 'Official Partner' },
+          { value: '24/7', label: 'Local Support' },
+        ].map((stat, index) => (
+          <div 
+            class="glass-card p-4 sm:p-6 hover:scale-105 transition-transform duration-300"
+            data-aos="zoom-in"
+            data-aos-delay={500 + (index * 100)}
+          >
+            <div class="text-xl sm:text-2xl font-bold text-forlux-orange-primary mb-2">{stat.value}</div>
+            <div class="text-xs sm:text-sm text-gray-300">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gradient-border {
+    background: linear-gradient(45deg, #F2C734, #EF6D21, #E41018);
+    padding: 1px;
+    border-radius: 0.5rem;
+  }
+
+  @keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -20px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(20px, 20px) scale(1.1); }
+  }
+
+  .animate-blob {
+    animation: blob 10s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+</style>

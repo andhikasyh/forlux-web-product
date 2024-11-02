@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProduct } from '../../utils/products';
+
+export async function getStaticPaths() {
+  // Define all possible product IDs
+  const productIds = ['integra', 'luminox', 'intellicam', 'samson'];
+  
+  return productIds.map(id => ({
+    params: { id },
+  }));
+}
+
+const { id } = Astro.params;
+const product = await getProduct(id);
+
+if (!product) return Astro.redirect('/404');
+---
+
+<Layout title={product.name}>
+  <div class="pt-16">
+    {/* Hero Section */}
+    <section class="py-20 relative">
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/10 to-transparent opacity-30 blur-3xl"></div>
+      </div>
+
+      <div class="container mx-auto px-4 relative">
+        <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+          {product.badge && (
+            <span class={`inline-block px-4 py-1 text-sm font-medium bg-gradient-to-r ${product.gradient} bg-clip-text text-transparent rounded-full border border-current mb-4`}>
+              {product.badge}
+            </span>
+          )}
+          <h1 class={`text-4xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
+            {product.name}
+          </h1>
+          <p class="text-xl text-gray-300 leading-relaxed">
+            {product.description}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* Features Grid */}
+    <section class="py-20 relative bg-slate-900/50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class={`text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
+            Key Features
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {product.features.map((feature, index) => (
+            <div 
+              class="glass-card p-6"
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
+              <span class="text-3xl mb-4 block">{feature.icon}</span>
+              <h3 class="text-lg font-bold text-white mb-2">{feature.title}</h3>
+              <p class="text-gray-400 text-sm">{feature.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Technical Specifications */}
+    <section class="py-20 relative">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class={`text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${product.gradient}`}>
+            Technical Specifications
+          </h2>
+        </div>
+
+        <div class="max-w-3xl mx-auto">
+          <div class="glass-card p-8">
+            <div class="space-y-6">
+              {product.specs.map((spec, index) => (
+                <div 
+                  class="flex items-start space-x-4"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                >
+                  <div class={`w-1.5 h-1.5 rounded-full mt-2 bg-gradient-to-r ${product.gradient}`}></div>
+                  <div>
+                    <h4 class="text-white font-medium mb-1">{spec}</h4>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Call to Action */}
+    <section class="py-20 relative bg-slate-900/50">
+      <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl font-bold mb-6 text-white">
+            Ready to Transform Your Traffic System?
+          </h2>
+          <p class="text-gray-400 mb-8">
+            Contact our team to schedule a demo and learn how {product.name} can revolutionize your city's infrastructure.
+          </p>
+          <a 
+            href="/contact" 
+            class={`inline-block px-8 py-3 rounded-lg text-white bg-gradient-to-r ${product.gradient} hover:opacity-90 transition-opacity duration-300`}
+          >
+            Schedule Demo
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

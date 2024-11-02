@@ -1,0 +1,186 @@
+---
+import ProductCard from './ProductCard';
+
+const products = [
+  {
+    id: 'integra',
+    name: 'FORLUX Integra',
+    tagline: 'Next-Gen Traffic Control',
+    description: 'Revolutionary smart traffic control system powered by ARM Cortex M4 technology, delivering unmatched reliability and real-time control.',
+    features: [
+      {
+        icon: '🔧',
+        title: 'ARM Cortex M4',
+        desc: 'Industrial-grade T7 series processor'
+      },
+      {
+        icon: '🔄',
+        title: 'Hot-Swappable Design',
+        desc: 'Zero-downtime maintenance'
+      },
+      {
+        icon: '📡',
+        title: 'Fiber Network',
+        desc: 'High-speed data transmission'
+      },
+      {
+        icon: '⚡',
+        title: 'Real-time Control',
+        desc: 'Instant traffic optimization'
+      }
+    ],
+    specs: [
+      'Advanced thermal management',
+      'Redundant power supply',
+      'Industrial-grade components',
+      'Remote diagnostics'
+    ],
+    animationType: 'processor',
+    gradient: 'from-forlux-orange-primary to-forlux-orange-secondary',
+    badge: 'Coming Soon'
+  },
+  {
+    id: 'luminox',
+    name: 'FORLUX Luminox',
+    tagline: 'Intelligent Traffic Lights',
+    description: 'Next-generation traffic light control system designed specifically for Indonesias unique traffic patterns.',
+    features: [
+      {
+        icon: '🎯',
+        title: 'Adaptive Control',
+        desc: 'Real-time traffic response'
+      },
+      {
+        icon: '🚨',
+        title: 'Emergency Priority',
+        desc: 'Automatic route clearing'
+      },
+      {
+        icon: '☔',
+        title: 'Weather Adaptive',
+        desc: 'Environmental optimization'
+      },
+      {
+        icon: '💡',
+        title: 'Smart LED',
+        desc: 'Energy-efficient lighting'
+      }
+    ],
+    specs: [
+      'Multi-phase signal control',
+      'Fail-safe operation',
+      'Energy monitoring',
+      'Predictive maintenance'
+    ],
+    animationType: 'trafficLight',
+    gradient: 'from-forlux-green-primary to-forlux-green-secondary',
+    badge: 'Pre-order'
+  },
+  {
+    id: 'intellicam',
+    name: 'FORLUX IntelliCam',
+    tagline: 'AI-Powered Surveillance',
+    description: 'Advanced AI-powered traffic cameras that transform raw footage into actionable insights.',
+    features: [
+      {
+        icon: '🚗',
+        title: 'Vehicle Detection',
+        desc: 'Real-time recognition'
+      },
+      {
+        icon: '🔍',
+        title: 'Plate Recognition',
+        desc: 'High-accuracy ANPR'
+      },
+      {
+        icon: '📊',
+        title: 'Flow Analysis',
+        desc: 'Traffic pattern insights'
+      },
+      {
+        icon: '⚠️',
+        title: 'Incident Detection',
+        desc: 'Automatic alerts'
+      }
+    ],
+    specs: [
+      '4K resolution capture',
+      'Night vision capability',
+      'Edge AI processing',
+      'Weather-resistant IP67'
+    ],
+    animationType: 'camera',
+    gradient: 'from-forlux-orange-secondary to-forlux-orange-accent',
+    badge: 'Featured'
+  },
+  {
+    id: 'samson',
+    name: 'FORLUX-SAMSON',
+    tagline: 'Command & Control',
+    description: 'Comprehensive traffic monitoring system that unifies all FORLUX components into a single GIS-based command center.',
+    features: [
+      {
+        icon: '🌍',
+        title: 'GIS Integration',
+        desc: 'Real-time mapping'
+      },
+      {
+        icon: '📱',
+        title: 'Multi-platform',
+        desc: 'Access anywhere'
+      },
+      {
+        icon: '🤖',
+        title: 'AI Analytics',
+        desc: 'Smart predictions'
+      },
+      {
+        icon: '📊',
+        title: 'Custom Reports',
+        desc: 'Detailed insights'
+      }
+    ],
+    specs: [
+      'Cloud-native architecture',
+      'Real-time synchronization',
+      'Multi-tenant support',
+      'Advanced encryption'
+    ],
+    animationType: 'dashboard',
+    gradient: 'from-forlux-green-secondary to-forlux-green-accent',
+    badge: 'Enterprise'
+  }
+];
+---
+
+<section class="relative py-32">
+  <div class="absolute inset-0">
+    <div class="absolute inset-0 bg-gradient-radial from-forlux-orange-primary/10 to-transparent opacity-30 blur-3xl"></div>
+  </div>
+  
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="inline-block px-4 py-1 text-sm font-medium text-forlux-orange-primary bg-forlux-orange-primary/10 rounded-full border border-forlux-orange-primary/20 mb-4">
+        100% Made in Indonesia
+      </span>
+      <h2 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-forlux-orange-gradient">
+        Complete Traffic Management Suite
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        Discover our comprehensive range of smart traffic solutions, engineered and manufactured in Indonesia to meet global standards.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {products.map((product, index) => (
+        <div 
+          data-aos="fade-up" 
+          data-aos-delay={index * 100}
+          class="flex items-stretch"
+        >
+          <ProductCard product={product} client:load />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
