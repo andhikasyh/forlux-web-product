@@ -672,6 +672,67 @@ export const translations = {
           ]
         }
       }
+    },
+
+    about: {
+      hero: {
+        badge: "Est. 1999",
+        title: "Shaping the Future of Urban Mobility",
+        description: "For over two decades, we've been at the forefront of traffic management innovation, combining Indonesian expertise with world-class technology to create smarter, safer cities.",
+        cta: {
+          primary: "Partner With Us",
+          secondary: "View Roadmap"
+        }
+      },
+      stats: [
+        { value: "25+", label: "Years Experience", description: "Leading traffic innovation since 1999" },
+        { value: "20+", label: "Cities Served", description: "Transforming urban mobility nationwide" },
+        { value: "2000+", label: "Traffic Systems", description: "Deployed and maintained successfully" },
+        { value: "99.9%", label: "System Reliability", description: "Industry-leading uptime" }
+      ],
+      values: [
+        {
+          icon: "🎯",
+          title: "Innovation First",
+          description: "Pioneering next-generation traffic solutions with cutting-edge technology and Indonesian ingenuity"
+        },
+        {
+          icon: "🌿",
+          title: "Sustainability",
+          description: "Committed to eco-friendly urban development through smart, energy-efficient solutions"
+        },
+        {
+          icon: "🤝",
+          title: "Local Impact",
+          description: "Empowering Indonesian cities with world-class technology and local expertise"
+        },
+        {
+          icon: "⚡",
+          title: "Excellence",
+          description: "Delivering unmatched quality and reliability in every system we deploy"
+        }
+      ],
+      roadmap: {
+        badge: "Looking Forward",
+        title: "Product Roadmap 2024",
+        description: "Discover our vision for the future of traffic management technology"
+      },
+      achievements: {
+        title: "Recent Achievements",
+        subtitle: "Milestones & Recognition",
+        0: {
+          title: "ARM Partnership",
+          description: "Official technology partner for traffic systems"
+        },
+        1: {
+          title: "ISO 27001",
+          description: "Information security certification"
+        },
+        2: {
+          title: "TKDN + 50%",
+          description: "Local content certification achieved"
+        }
+      }
     }
   },
 
@@ -1292,6 +1353,67 @@ export const translations = {
               description: "Keamanan fungsional untuk sistem elektronik"
             }
           ]
+        }
+      }
+    },
+
+    about: {
+      hero: {
+        badge: "Sejak 1999",
+        title: "Membentuk Masa Depan Mobilitas Perkotaan",
+        description: "Selama lebih dari dua dekade, kami berada di garis depan inovasi manajemen lalu lintas, menggabungkan keahlian Indonesia dengan teknologi kelas dunia untuk menciptakan kota yang lebih cerdas dan aman.",
+        cta: {
+          primary: "Bermitra Dengan Kami",
+          secondary: "Lihat Roadmap"
+        }
+      },
+      stats: [
+        { value: "25+", label: "Tahun Pengalaman", description: "Memimpin inovasi lalu lintas sejak 1999" },
+        { value: "20+", label: "Kota Dilayani", description: "Mentransformasi mobilitas perkotaan nasional" },
+        { value: "2000+", label: "Sistem Lalu Lintas", description: "Berhasil dipasang dan dipelihara" },
+        { value: "99.9%", label: "Keandalan Sistem", description: "Uptime terdepan di industri" }
+      ],
+      values: [
+        {
+          icon: "🎯",
+          title: "Inovasi Pertama",
+          description: "Mempelopori solusi lalu lintas generasi berikutnya dengan teknologi mutakhir dan kejeniusan Indonesia"
+        },
+        {
+          icon: "🌿",
+          title: "Keberlanjutan",
+          description: "Berkomitmen pada pembangunan perkotaan ramah lingkungan melalui solusi hemat energi yang cerdas"
+        },
+        {
+          icon: "🤝",
+          title: "Dampak Lokal",
+          description: "Memberdayakan kota-kota Indonesia dengan teknologi kelas dunia dan keahlian lokal"
+        },
+        {
+          icon: "⚡",
+          title: "Keunggulan",
+          description: "Memberikan kualitas dan keandalan yang tak tertandingi dalam setiap sistem yang kami terapkan"
+        }
+      ],
+      roadmap: {
+        badge: "Melihat ke Depan",
+        title: "Roadmap Produk 2024",
+        description: "Temukan visi kami untuk masa depan teknologi manajemen lalu lintas"
+      },
+      achievements: {
+        title: "Pencapaian Terbaru",
+        subtitle: "Tonggak & Pengakuan",
+        0: {
+          title: "Kemitraan ARM",
+          description: "Mitra teknologi resmi untuk sistem lalu lintas"
+        },
+        1: {
+          title: "ISO 27001",
+          description: "Information security certification"
+        },
+        2: {
+          title: "TKDN + 50%",
+          description: "Local content certification achieved"
         }
       }
     }
